@@ -152,13 +152,13 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BattleShots.Models\BattleShots.Models.csproj">
-      <Project>{5795AFF7-C5AF-485A-8124-17D4528C362D}</Project>
-      <Name>BattleShots.Models</Name>
-    </ProjectReference>
+    <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="packages.config" />
+    <ProjectReference Include="..\BattleShots.Models\BattleShots.Models.csproj">
+      <Project>{1660d773-a31d-4899-8d77-f4e91c9f7524}</Project>
+      <Name>BattleShots.Models</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
