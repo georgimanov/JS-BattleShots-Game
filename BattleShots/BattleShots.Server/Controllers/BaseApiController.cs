@@ -21,7 +21,7 @@ namespace BattleShots.Server.Controllers
 
             ErrorsToStatusCodes[ErrorType.InvalidUsernameLength] = HttpStatusCode.BadRequest;
             ErrorsToStatusCodes[ErrorType.InvalidUsernameCharacters] = HttpStatusCode.BadRequest;
-            
+
             ErrorsToStatusCodes[ErrorType.GeneralError] = HttpStatusCode.InternalServerError;
         }
 
@@ -29,30 +29,12 @@ namespace BattleShots.Server.Controllers
         {
         }
 
-        protected HttpResponseMessage PerformOperation(Action action)
-        {
-            try
-            {
-                action();
-                return Request.CreateResponse(HttpStatusCode.OK);
-            }
-            catch (ServerErrorException ex)
-            {
-                return BuildErrorResponse(ex.Message, ex.ErrorType);
-            }
-            catch (Exception ex)
-            {
-                var errType = ErrorType.GeneralError;
-                return BuildErrorResponse(ex.Message, errType);
-            }
-        }
-
-        protected HttpResponseMessage PerformOperation<T>(Func<T> action)
+        protected IHttpActionResult PerformOperation<T>(Func<T> action)
         {
             try
             {
                 var result = action();
-                return Request.CreateResponse(HttpStatusCode.OK, result);
+                return Ok(result);
             }
             catch (ServerErrorException ex)
             {
@@ -65,12 +47,12 @@ namespace BattleShots.Server.Controllers
             }
         }
 
-        private HttpResponseMessage BuildErrorResponse(string message, string errType)
+        private IHttpActionResult BuildErrorResponse(string message, string errType)
         {
             var httpError = new HttpError(message);
             httpError["errType"] = errType;
             var statusCode = ErrorsToStatusCodes[errType];
-            return Request.CreateErrorResponse(statusCode, httpError);
+            return ResponseMessage(Request.CreateErrorResponse(statusCode, httpError));
         }
     }
 }

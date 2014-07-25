@@ -12,7 +12,7 @@ namespace BattleShots.Models
 
         public virtual User User { get; set; }
 
-        public virtual Type Type { get; set; }
+        public virtual MessageType Type { get; set; }
 
         public virtual MessageState State { get; set; }
     }

@@ -25,9 +25,9 @@ namespace BattleShots.Server.Controllers
         // POST api/account/register
         [HttpPost]
         [ActionName("register")]
-        public HttpResponseMessage RegisterUser(UserRegisteringModel userModel)
+        public IHttpActionResult RegisterUser([FromBody]UserRegisteringModel userModel)
         {
-            var responseMessage = this.PerformOperation(() =>
+            var response = this.PerformOperation(() =>
                 {
                     var context = new ApplicationDbContext();
                     using (context)
@@ -61,19 +61,19 @@ namespace BattleShots.Server.Controllers
                             SessionKey = user.SessionKey
                         };
 
-                        return this.Request.CreateResponse(HttpStatusCode.Created, loggedInUser);
+                        return loggedInUser;
                     }
                 });
 
-            return responseMessage;
+            return response;
         }
 
         // POST api/account/login
         [HttpPost]
         [ActionName("login")]
-        public HttpResponseMessage LoginUser(UserLoggingInModel userModel)
+        public IHttpActionResult LoginUser(UserLoggingInModel userModel)
         {
-            var responseMessage = this.PerformOperation(() =>
+            var response = this.PerformOperation(() =>
                 {
                     var context = new ApplicationDbContext();
                     using (context)
@@ -100,20 +100,20 @@ namespace BattleShots.Server.Controllers
                             SessionKey = existingUser.SessionKey
                         };
 
-                        return this.Request.CreateResponse(HttpStatusCode.Created, loggedUser);
+                        return Created(loggedUser.Username, loggedUser);
                     }
                 });
 
-            return responseMessage;
+            return response;
         }
 
         // PUT api/account/logout
         [HttpPut]
         [ActionName("logout")]
-        public HttpResponseMessage LogoutUser(
+        public IHttpActionResult LogoutUser(
             [ValueProvider(typeof(HeaderValueProviderFactory<string>))] string sessionKey)
         {
-            var responseMessage = this.PerformOperation(() =>
+            var response = this.PerformOperation(() =>
                 {
                     var context = new ApplicationDbContext();
                     using (context)
@@ -128,11 +128,11 @@ namespace BattleShots.Server.Controllers
                         existingUser.SessionKey = null;
                         context.SaveChanges();
 
-                        return this.Request.CreateResponse(HttpStatusCode.OK);
+                        return Ok();
                     }
                 });
 
-            return responseMessage;
+            return response;
         }
 
         internal static User GetUserBySessionKey(ApplicationDbContext context, string sessionKey)

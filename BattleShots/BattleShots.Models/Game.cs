@@ -19,7 +19,7 @@ namespace BattleShots.Models
 
         public virtual GameState State { get; set; }
 
-        public virtual List<Message> Messages { get; set; }
+        public virtual ICollection<Message> Messages { get; set; }
 
         public virtual Board FirstPlayerBoard { get; set; }
 
