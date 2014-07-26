@@ -47,6 +47,24 @@ namespace BattleShots.Server.Controllers
             }
         }
 
+        protected IHttpActionResult PerformOperationWithNoContent<T>(Func<T> action)
+        {
+            try
+            {
+                var result = action();
+                return ResponseMessage(new HttpResponseMessage(HttpStatusCode.NoContent));
+            }
+            catch (ServerErrorException ex)
+            {
+                return BuildErrorResponse(ex.Message, ex.ErrorType);
+            }
+            catch (Exception ex)
+            {
+                var errType = ErrorType.GeneralError;
+                return BuildErrorResponse(ex.Message, errType);
+            }
+        }
+
         private IHttpActionResult BuildErrorResponse(string message, string errType)
         {
             var httpError = new HttpError(message);

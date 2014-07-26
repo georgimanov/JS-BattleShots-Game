@@ -100,7 +100,7 @@ namespace BattleShots.Server.Controllers
                             SessionKey = existingUser.SessionKey
                         };
 
-                        return Created(loggedUser.Username, loggedUser);
+                        return loggedUser;
                     }
                 });
 
@@ -110,11 +110,11 @@ namespace BattleShots.Server.Controllers
         // PUT api/account/logout
         [HttpPut]
         [ActionName("logout")]
-        public IHttpActionResult LogoutUser(
-            [ValueProvider(typeof(HeaderValueProviderFactory<string>))] string sessionKey)
+        public IHttpActionResult LogoutUser()
         {
-            var response = this.PerformOperation(() =>
+            var response = this.PerformOperationWithNoContent(() =>
                 {
+                    string sessionKey = Request.Headers.GetValues("X-SessionKey").First();
                     var context = new ApplicationDbContext();
                     using (context)
                     {
@@ -128,7 +128,7 @@ namespace BattleShots.Server.Controllers
                         existingUser.SessionKey = null;
                         context.SaveChanges();
 
-                        return Ok();
+                        return "";
                     }
                 });
 
