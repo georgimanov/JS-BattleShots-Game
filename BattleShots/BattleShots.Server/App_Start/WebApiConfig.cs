@@ -15,13 +15,23 @@ namespace BattleShots.Server
             config.MapHttpAttributeRoutes();
             config.Routes.MapHttpRoute(
                 name: "UsersApi",
-                routeTemplate: "api/account/{action}",
+                routeTemplate: "api/{controller}/{action}",
                 defaults: new { controller = "account", action = RouteParameter.Optional });
+            config.Routes.MapHttpRoute(
+                name: "GamesApi",
+                routeTemplate: "api/games/{action}",
+                defaults: new { controller = "games", action = RouteParameter.Optional });
+            config.Routes.MapHttpRoute(
+                name: "ActionApi",
+                routeTemplate: "api/{controller}/{action}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
         }
     }
 }

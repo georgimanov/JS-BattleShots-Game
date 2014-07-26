@@ -17,6 +17,8 @@ namespace BattleShots.Models
 
         public virtual User SecondPlayer { get; set; }
 
+        public int CurrentTurn { get; set; }
+
         public virtual GameState State { get; set; }
 
         public virtual ICollection<Message> Messages { get; set; }

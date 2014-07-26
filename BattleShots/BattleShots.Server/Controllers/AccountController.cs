@@ -15,7 +15,6 @@ namespace BattleShots.Server.Controllers
     {
         private const int MinUsernameLength = 6;
         private const int MaxUsernameLength = 40;
-        private const int Sha1Length = 40;
         private const int SessionKeyLength = 50;
         private const string ValidUsernameCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_.";
         private const string SessionKeyCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
@@ -47,7 +46,6 @@ namespace BattleShots.Server.Controllers
                             Username = userModel.Username,
                             Password = userModel.Password,
                             Score = 0
-
                         };
                         context.Users.Add(user);
                         context.SaveChanges();
@@ -114,7 +112,7 @@ namespace BattleShots.Server.Controllers
         {
             var response = this.PerformOperationWithNoContent(() =>
                 {
-                    string sessionKey = Request.Headers.GetValues("X-SessionKey").First();
+                    string sessionKey = GetSessionKey();
                     var context = new ApplicationDbContext();
                     using (context)
                     {
@@ -157,15 +155,6 @@ namespace BattleShots.Server.Controllers
             else if (username.Any(ch => !ValidUsernameCharacters.Contains(ch)))
             {
                 throw new ServerErrorException("The username contains invalid characters.", ErrorType.InvalidUsernameCharacters);
-            }
-        }
-
-
-        private void ValidatePassword(string password)
-        {
-            if (password.Length != Sha1Length)
-            {
-                throw new ServerErrorException("The password is invalid.", ErrorType.InvalidUserAuthentication);
             }
         }
 
