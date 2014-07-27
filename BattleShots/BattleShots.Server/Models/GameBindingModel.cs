@@ -15,7 +15,6 @@ namespace BattleShots.Server.Models
         public string Title { get; set; }
 
         [DataMember(Name = "password")]
-        [Required]
         public string Password { get; set; }
     }
 }

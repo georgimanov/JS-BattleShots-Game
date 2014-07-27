@@ -21,7 +21,11 @@ namespace BattleShots.Server.Controllers
             var response = this.PerformOperation(() =>
             {
                 string sessionKey = GetSessionKey();
-                ValidatePassword(gameModel.Password);
+                if (!string.IsNullOrEmpty(gameModel.Password))
+                {
+                    ValidatePassword(gameModel.Password);
+                }
+
                 var context = new ApplicationDbContext();
                 using (context)
                 {
@@ -51,7 +55,7 @@ namespace BattleShots.Server.Controllers
             return response;
         }
 
-        // POST api/games/join/
+        // POST api/games/join/5
         [HttpPost, ActionName("join")]
         public IHttpActionResult Join(int id, [FromBody]GameBindingModel gameModel)
         {
@@ -79,7 +83,7 @@ namespace BattleShots.Server.Controllers
                         throw new ServerErrorException("The game does not exist.", ErrorType.InvalidGame);
                     }
                     
-                    if (!string.IsNullOrEmpty(gameModel.Password) && game.Password != gameModel.Password)
+                    if (!string.IsNullOrEmpty(game.Password) && game.Password != gameModel.Password)
                     {
                         throw new ServerErrorException("The entered password for this game is wrong.", ErrorType.InvalidPassword);
                     }

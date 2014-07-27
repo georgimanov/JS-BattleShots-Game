@@ -25,6 +25,7 @@ namespace BattleShots.Server.Controllers
             ErrorsToStatusCodes[ErrorType.InvalidUsernameLength] = HttpStatusCode.BadRequest;
             ErrorsToStatusCodes[ErrorType.InvalidUsernameCharacters] = HttpStatusCode.BadRequest;
             ErrorsToStatusCodes[ErrorType.InvalidGame] = HttpStatusCode.BadRequest;
+            ErrorsToStatusCodes[ErrorType.InvalidInput] = HttpStatusCode.BadRequest;
 
             ErrorsToStatusCodes[ErrorType.GeneralError] = HttpStatusCode.InternalServerError;
         }

@@ -131,19 +131,26 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseApiController.cs" />
+    <Compile Include="Controllers\BattleController.cs" />
     <Compile Include="Controllers\GamesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\FiguresPlacingModel.cs" />
     <Compile Include="Models\GameBindingModel.cs" />
+    <Compile Include="Models\GameWithBoardsViewModel.cs" />
     <Compile Include="Models\GameViewModel.cs" />
+    <Compile Include="Models\UnitBindingModel.cs" />
     <Compile Include="Models\UserLoggedInModel.cs" />
     <Compile Include="Models\UserLoggingInModel.cs" />
     <Compile Include="Models\UserRegisteringModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\BoardUtilities.cs" />
+    <Compile Include="Utilities\Cell.cs" />
     <Compile Include="Utilities\ErrorType.cs" />
     <Compile Include="Utilities\ServerErrorException.cs" />
+    <Compile Include="Utilities\Ship.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="favicon.ico" />

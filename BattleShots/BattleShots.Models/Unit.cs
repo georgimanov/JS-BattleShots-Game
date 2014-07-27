@@ -7,14 +7,13 @@ namespace BattleShots.Models
     {
         public int Id { get; set; }
 
-        public int PositionX { get; set; }
-
-        public int PositionY { get; set; }
-
-        public virtual Rotation Rotation { get; set; }
+        [Required]
+        public int Row { get; set; }
 
         [Required]
-        public string Body { get; set; }
+        public int Col { get; set; }
+
+        public virtual Rotation Rotation { get; set; }
 
         public virtual UnitType Type { get; set; }
 

@@ -23,8 +23,16 @@ namespace BattleShots.Models
 
         public virtual ICollection<Message> Messages { get; set; }
 
+        public virtual ICollection<Unit> FirstPlayerUnits { get; set; }
+        
+        public virtual ICollection<Unit> SecondPlayerUnits { get; set; }
+
         public virtual Board FirstPlayerBoard { get; set; }
+        
+        public virtual Board FirstPlayerVisibleBoard { get; set; }
 
         public virtual Board SecondPlayerBoard { get; set; }
+
+        public virtual Board SecondPlayerVisibleBoard { get; set; }
     }
 }
