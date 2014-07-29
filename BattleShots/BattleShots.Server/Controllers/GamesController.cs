@@ -1,4 +1,5 @@
 ﻿using BattleShots.Models;
+using BattleShots.Server.Hubs;
 using BattleShots.Server.Models;
 using BattleShots.Server.Utilities;
 using System;

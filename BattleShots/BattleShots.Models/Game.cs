@@ -34,5 +34,9 @@ namespace BattleShots.Models
         public virtual Board SecondPlayerBoard { get; set; }
 
         public virtual Board SecondPlayerVisibleBoard { get; set; }
+
+        public string FirstPlayerConnId { get; set; }
+
+        public string SecondPlayerConnId { get; set; }
     }
 }
