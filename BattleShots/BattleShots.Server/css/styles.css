@@ -1,5 +1,5 @@
 body {
-    background-image: url(Resources/background-image.jpg);
+    background-image: url(../img/background-image.jpg);
     font-family: calibri;
     color: #4d602b;
     padding: 0;
@@ -156,6 +156,45 @@ main {
     width: 45px;
     height: 45px;
     background-color: #fcf1c3;
+    background-repeat:no-repeat;
+    background-position:center;
+
 }
-    
+.hidden{
+    display: none;
+}
+#error-dialog > .ui-dialog-titlebar-close{
+    display: none;
+}
+
+
+.patrol-boat{
+    background-image: url(../img/patrol-boat.png);
+}
+.patrol-boat-demage{
+    background-image: url(../img/patrol-boat-demage.png);
+}
+.aircraft-carrier{
+    background-image: url(../img/aircraft-carrier.png);
+}
+.aircraft-carrier-demage{
+    background-image: url('../img/aircraft-carrier-demage.png');
+}
+.battleship{
+    background-image: url('../img/battleship.png');
+}
+.battleship-demage{
+    background-image: url('../img/battleship-demage.png');
+}
+.destroyer{
+    background-image: url('../img/destroyer.png');
+}
+.destroyer-demage{
+   background-image:  url('../img/destroyer-demage.png');
+}
+.submarine{
+    background-image: url('../img/submarine.png');
+}
+.submarine-demage{
+    background-image: url('../img/submarine.png');
 }

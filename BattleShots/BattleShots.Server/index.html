@@ -3,19 +3,21 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>BattleShots</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="Scripts/jquery-ui-1.11.0/jquery-ui.min.css">
+
 </head>
 <body>
 <div id="wrapper">
     <header>
       <div id="logo">
-           <img src="Resources/logo.png">
+           <img src="img/logo.png">
        </div>
        <div id="user-box">
-            <span>Жаден ли си, Юзър?</span>
+            <span>Жаден ли си, <span id="username"></span>? </span>
             <div>
                 <button>профил</button>
-                <button>изход</button>
+                <button onclick="logOut();">изход</button>
             </div>
         </div>
     </header>
@@ -190,9 +192,9 @@
         <div id="right-side">
             <div id="main-board">
                 <div class="grid-line">
-                    <div class="grid-box" id="main-1-1"></div>
-                    <div class="grid-box" id="main-1-2"></div>
-                    <div class="grid-box" id="main-1-3"></div>
+                    <div class="grid-box patrol-boat water" id="main-1-1"></div>
+                    <div class="grid-box patrol-boat-demage" id="main-1-2"></div>
+                    <div class="grid-box patrol-boat-demage" id="main-1-3"></div>
                     <div class="grid-box" id="main-1-4"></div>
                     <div class="grid-box" id="main-1-5"></div>
                     <div class="grid-box" id="main-1-6"></div>
@@ -313,5 +315,33 @@
         </div>
     </main>
 </div>
+<div id="dialog" class='hidden'>
+    <div id="login-join-form" >
+        <form id="login-form" >
+            Login <br />
+            <input id="username-login" /><br/>
+            <input id="password-login"/><br />
+            <a href="javascript: checkLogin()">Login</a>
+        </form>
+
+        <hr />
+
+        <form id="join-form">
+            Join <br />
+            <input id="username-join" /><br/>
+            <input id="password-join"/><br />
+            <a href="javascript: registerUser()">Join</a>
+        </form>
+    </div>
+</div>
+<div id="error-dialog" title="Грешка!" class="hidden"></div>
+<script src="Scripts/jquery-1.11.1.min.js"></script>
+<script src="Scripts/jquery.signalR-2.1.1.js"></script>
+<script src="/signalr/hubs"></script>
+<script src="Scripts/sha1.js"></script>
+<script src="Scripts/jquery-ui-1.11.0/jquery-ui.min.js"></script>
+<script src="Scripts/http-requester.js"></script>
+<script src="Scripts/rsvp.min.js"></script>
+<script src="Scripts/main.js"></script>
 </body>
 </html>
