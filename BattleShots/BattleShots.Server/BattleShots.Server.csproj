@@ -181,10 +181,21 @@
     <Compile Include="Utilities\Ship.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\styles.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="index.html" />
+    <Content Include="Partials\simple-board.html" />
+    <Content Include="Scripts\class.js" />
+    <Content Include="Scripts\data.js" />
+    <Content Include="Scripts\http-requester.js" />
+    <Content Include="Scripts\jquery-1.11.1.min.js" />
     <Content Include="Scripts\jquery.signalR-2.1.1.js" />
     <Content Include="Scripts\jquery.signalR-2.1.1.min.js" />
+    <Content Include="Scripts\main.js" />
+    <Content Include="Scripts\rsvp.min.js" />
+    <Content Include="Scripts\sha1.js" />
+    <Content Include="Scripts\template.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
