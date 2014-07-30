@@ -1,4 +1,5 @@
-﻿using BattleShots.Server.Models;
+﻿using BattleShots.Models;
+using BattleShots.Server.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,35 @@ namespace BattleShots.Server.Utilities
     public static class BoardUtilities
     {
         private const int BoardSize = 10;
+
+        public static char[,] GenerateVisibleBoard(char[,] attackedBoard)
+        {
+            char[,] visibleBoard = new char[BoardSize, BoardSize];
+            for (int i = 0; i < attackedBoard.GetLength(0); i++)
+            {
+                for (int j = 0; j < attackedBoard.GetLength(1); j++)
+                {
+                    if (attackedBoard[i, j] == Cell.HitWaterBody)
+                    {
+                        visibleBoard[i, j] = Cell.HitWaterBody;
+                    }
+                    else if (attackedBoard[i, j] == Cell.HitAircraftCarrierBody ||
+                        attackedBoard[i, j] == Cell.HitBattleshipBody ||
+                        attackedBoard[i, j] == Cell.HitDestroyerBody ||
+                        attackedBoard[i, j] == Cell.HitSubmarineBody ||
+                        attackedBoard[i, j] == Cell.HitPatrolBoatBody)
+                    {
+                        visibleBoard[i, j] = Cell.HitShipBody;
+                    }
+                    else
+                    {
+                        visibleBoard[i, j] = Cell.Empty;
+                    }
+                }
+            }
+
+            return visibleBoard;
+        }
 
         public static char[,] GenerateEmptyBoard()
         {
@@ -122,7 +152,7 @@ namespace BattleShots.Server.Utilities
                     String.Format("Invalid position of unit at ({0}; {1})", unitModel.Row, unitModel.Col),
                     ErrorType.InvalidInput);
             }
-            
+
             if (unitModel.Rotation != Ship.HorizontalRotation && unitModel.Rotation != Ship.VerticalRotation)
             {
                 throw new ServerErrorException(
@@ -172,6 +202,59 @@ namespace BattleShots.Server.Utilities
                     }
                 }
             }
+        }
+
+        public static void ValidateAttack(AttackingModel model)
+        {
+            if (model.Row < 1 || model.Row > BoardSize)
+            {
+                throw new ServerErrorException("The specified row is invalid.", ErrorType.InvalidInput);
+            }
+
+            if (model.Col < 1 || model.Col > BoardSize)
+            {
+                throw new ServerErrorException("The specified column is invalid.", ErrorType.InvalidInput);
+            }
+        }
+
+        public static char Attack(char[,] attackedBoard, AttackingModel attackingModel)
+        {
+            char cell = attackedBoard[attackingModel.Row - 1, attackingModel.Col - 1];
+            if (cell == Cell.Empty || cell == Cell.HitWaterBody)
+            {
+                cell = Cell.HitWaterBody;
+            }
+            else if (cell == Cell.AircraftCarrierBody ||
+                cell == Cell.BattleshipBody ||
+                cell == Cell.DestroyerBody ||
+                cell == Cell.SubmarineBody ||
+                cell == Cell.PatrolBoatBody)
+            {
+                switch (cell)
+                {
+                    case Cell.AircraftCarrierBody:
+                        cell = Cell.HitAircraftCarrierBody;
+                        break;
+                    case Cell.BattleshipBody:
+                        cell = Cell.HitBattleshipBody;
+                        break;
+                    case Cell.DestroyerBody:
+                        cell = Cell.HitDestroyerBody;
+                        break;
+                    case Cell.SubmarineBody:
+                        cell = Cell.HitSubmarineBody;
+                        break;
+                    case Cell.PatrolBoatBody:
+                        cell = Cell.HitPatrolBoatBody;
+                        break;
+                }
+            }
+            else
+            {
+                return '\0';
+            }
+
+            return cell;
         }
     }
 }

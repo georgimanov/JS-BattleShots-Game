@@ -19,6 +19,8 @@ namespace BattleShots.Models
 
         public int CurrentTurn { get; set; }
 
+        public virtual User Winner { get; set; }
+
         public virtual GameState State { get; set; }
 
         public virtual ICollection<Message> Messages { get; set; }
@@ -27,13 +29,13 @@ namespace BattleShots.Models
         
         public virtual ICollection<Unit> SecondPlayerUnits { get; set; }
 
-        public virtual Board FirstPlayerBoard { get; set; }
-        
-        public virtual Board FirstPlayerVisibleBoard { get; set; }
-
-        public virtual Board SecondPlayerBoard { get; set; }
-
-        public virtual Board SecondPlayerVisibleBoard { get; set; }
+        public string FirstPlayerBoard { get; set; }
+               
+        public string FirstPlayerVisibleBoard { get; set; }
+               
+        public string SecondPlayerBoard { get; set; }
+               
+        public string SecondPlayerVisibleBoard { get; set; }
 
         public string FirstPlayerConnId { get; set; }
 

@@ -163,6 +163,7 @@
     </Compile>
     <Compile Include="Hubs\BattleHub.cs" />
     <Compile Include="Hubs\GameHub.cs" />
+    <Compile Include="Models\AttackingModel.cs" />
     <Compile Include="Models\FiguresPlacingModel.cs" />
     <Compile Include="Models\GameBindingModel.cs" />
     <Compile Include="Models\GameWithBoardsViewModel.cs" />

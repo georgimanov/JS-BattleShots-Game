@@ -13,6 +13,9 @@ namespace BattleShots.Models
         [Required]
         public int Col { get; set; }
 
+        [Required]
+        public int RemainingCells { get; set; }
+
         public virtual Rotation Rotation { get; set; }
 
         public virtual UnitType Type { get; set; }

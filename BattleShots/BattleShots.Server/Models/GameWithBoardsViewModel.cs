@@ -12,5 +12,11 @@ namespace BattleShots.Server.Models
         public string MyBoard { get; set; }
 
         public string OpponentBoard { get; set; }
+
+        public string Winner { get; set; }
+
+        public IEnumerable<string> MyUnits { get; set; }
+
+        public IEnumerable<string> OpponentUnits { get; set; }
     }
 }
