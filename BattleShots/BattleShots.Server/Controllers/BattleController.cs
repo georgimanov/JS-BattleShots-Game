@@ -118,20 +118,186 @@ namespace BattleShots.Server.Controllers
 
                     context.SaveChanges();
 
-                    return new[] { game }.Select(g => new GameWithBoardsViewModel()
-                    {
-                        Id = g.Id,
-                        Title = g.Title,
-                        FirstPlayer = g.FirstPlayer.Username,
-                        SecondPlayer = g.SecondPlayer.Username,
-                        State = g.State.State,
-                        MyBoard = ((playerNumber == 1) ? g.FirstPlayerBoard.BoardBody : g.SecondPlayerBoard.BoardBody),
-                        OpponentBoard = ((playerNumber == 1) ? g.SecondPlayerVisibleBoard.BoardBody : g.FirstPlayerVisibleBoard.BoardBody),
-                    }).First();
+                    return GetGameModel(game, playerNumber);
                 }
             });
 
             return response;
+        }
+
+        // GET api/battle/state/5
+        [HttpGet]
+        public IHttpActionResult State(int id)
+        {
+            var response = this.PerformOperation(() =>
+            {
+                string sessionKey = GetSessionKey();
+
+                var context = new ApplicationDbContext();
+                using (context)
+                {
+                    var user = context.Users.FirstOrDefault(u => u.SessionKey == sessionKey);
+                    if (user == null)
+                    {
+                        throw new ServerErrorException("The user does not exist.", ErrorType.InvalidUser);
+                    }
+
+                    var game = context.Games.FirstOrDefault(g => g.Id == id);
+                    var stateGameReady = context.GameStates.First(s => s.State == GameReadyState);
+                    var stateBattleStarted = context.GameStates.First(s => s.State == BattleStartedState);
+                    if (game == null)
+                    {
+                        throw new ServerErrorException("The game does not exist.", ErrorType.InvalidGame);
+                    }
+
+                    if (game.State != stateGameReady && game.State != stateBattleStarted)
+                    {
+                        throw new ServerErrorException("The game is not currently in progress.", ErrorType.InvalidGame);
+                    }
+
+                    int playerNumber = 0;
+                    if (game.FirstPlayer != user)
+                    {
+                        if (game.SecondPlayer != user)
+                        {
+                            throw new ServerErrorException("You cannot play in this game.", ErrorType.InvalidGame);
+                        }
+                        else
+                        {
+                            playerNumber = 2;
+                        }
+                    }
+                    else
+                    {
+                        playerNumber = 1;
+                    }
+
+                    return GetGameModel(game, playerNumber);
+                }
+            });
+
+            return response;
+        }
+
+        // POST api/battle/attack/5
+        [HttpPost]
+        public IHttpActionResult Attack(int id, [FromBody]FiguresPlacingModel attackingModel)
+        {
+            var response = this.PerformOperation(() =>
+            {
+                string sessionKey = GetSessionKey();
+                if (!string.IsNullOrEmpty(attackingModel.Password))
+                {
+                    ValidatePassword(attackingModel.Password);
+                }
+
+                var context = new ApplicationDbContext();
+                using (context)
+                {
+                    var user = context.Users.FirstOrDefault(u => u.SessionKey == sessionKey);
+                    if (user == null)
+                    {
+                        throw new ServerErrorException("The user does not exist.", ErrorType.InvalidUser);
+                    }
+
+                    var game = context.Games.FirstOrDefault(g => g.Id == id);
+                    var stateInProgress = context.GameStates.First(s => s.State == InProgressState);
+                    if (game == null)
+                    {
+                        throw new ServerErrorException("The game does not exist.", ErrorType.InvalidGame);
+                    }
+
+                    if (!string.IsNullOrEmpty(game.Password) && game.Password != attackingModel.Password)
+                    {
+                        throw new ServerErrorException("The entered password for this game is wrong.", ErrorType.InvalidPassword);
+                    }
+
+                    if (game.State != stateInProgress)
+                    {
+                        throw new ServerErrorException("The game is not currently in progress.", ErrorType.InvalidGame);
+                    }
+
+                    int playerNumber = 0;
+                    if (game.FirstPlayer != user)
+                    {
+                        if (game.SecondPlayer != user)
+                        {
+                            throw new ServerErrorException("You cannot play in this game.", ErrorType.InvalidGame);
+                        }
+                        else
+                        {
+                            playerNumber = 2;
+                        }
+                    }
+                    else
+                    {
+                        playerNumber = 1;
+                    }
+
+                    char[,] board = BoardUtilities.GenerateEmptyBoard();
+                    var units = new List<Unit>();
+                    foreach (var model in attackingModel.Units)
+                    {
+                        board = BoardUtilities.PlaceUnit(board, model);
+                        var type = context.UnitTypes.First(t => t.Type == model.UnitType);
+                        var state = context.UnitStates.First(t => t.State == Ship.FullState);
+
+                        var rotation = context.Rotations.First(r => r.Type == model.Rotation);
+                        units.Add(new Unit()
+                        {
+                            User = playerNumber == 1 ? game.FirstPlayer : game.SecondPlayer,
+                            Type = type,
+                            State = state,
+                            Row = model.Row,
+                            Col = model.Col,
+                            Rotation = rotation,
+                            Game = game
+                        });
+                    }
+
+                    if (playerNumber == 1)
+                    {
+                        game.FirstPlayerBoard = new Board() { BoardBody = BoardUtilities.SerializeBoard(board) };
+                        game.FirstPlayerUnits = units;
+                    }
+                    else if (playerNumber == 2)
+                    {
+                        game.SecondPlayerBoard = new Board() { BoardBody = BoardUtilities.SerializeBoard(board) };
+                        game.SecondPlayerUnits = units;
+                    }
+
+                    game.FirstPlayerVisibleBoard = new Board() { BoardBody = BoardUtilities.SerializeBoard(BoardUtilities.GenerateEmptyBoard()) };
+                    game.SecondPlayerVisibleBoard = new Board() { BoardBody = BoardUtilities.SerializeBoard(BoardUtilities.GenerateEmptyBoard()) };
+
+                    context.SaveChanges();
+                    game = context.Games.FirstOrDefault(g => g.Id == id);
+                    if (game.FirstPlayerBoard != null && game.SecondPlayerBoard != null)
+                    {
+                        var state = context.GameStates.First(s => s.State == GameReadyState);
+                        game.State = state;
+                    }
+
+                    context.SaveChanges();
+
+                    return GetGameModel(game, playerNumber);
+                }
+            });
+
+            return response;
+        }
+
+        private static GameWithBoardsViewModel GetGameModel(Game game, int playerNumber)
+        {
+            return new[] { game }.Select(g => new GameWithBoardsViewModel()
+            {
+                Id = g.Id,
+                Title = g.Title,
+                FirstPlayer = g.FirstPlayer.Username,
+                SecondPlayer = g.SecondPlayer.Username,
+                State = g.State.State,
+                MyBoard = ((playerNumber == 1) ? g.FirstPlayerBoard.BoardBody : g.SecondPlayerBoard.BoardBody),
+                OpponentBoard = ((playerNumber == 1) ? g.SecondPlayerVisibleBoard.BoardBody : g.FirstPlayerVisibleBoard.BoardBody),
+            }).First();
         }
     }
 }
