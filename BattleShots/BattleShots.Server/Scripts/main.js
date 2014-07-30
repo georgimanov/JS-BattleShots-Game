@@ -3,125 +3,130 @@ var baseUrl = "http://localhost:32033/api/";
 var gameAcces = false;
 var selectBar = false;
 var userName = localStorage.getItem('userName');
-if(userName == null){
+var animationSpeed = 1200;
+if (userName == null) {
     userName = "Example User";
 }
-$(document).ready(function(){
+$(document).ready(function () {
     checkGameAcces();
 });
 
-function checkGameAcces(){
-    if(localStorage.getItem("sessionKey") == null){
+function checkGameAcces() {
+    if (localStorage.getItem("sessionKey") == null) {
         showLogin();
-    }else{
-       if(selectBar == true){
-           showArena();
-       }else{
-           showBars();
-       }
+    } else {
+        userName = localStorage.getItem('userName');
+        $('#username').html(userName);
+        $('#user-box').fadeIn(animationSpeed);
+        if (selectBar == true) {
+            showArena();
+        } else {
+            showBars();
+        }
     }
 }
 
-function showLogin(){
+function showLogin() {
     $('.basic-element').hide();
-    $('#login-box').fadeIn(1200);
+    $('#login-box').fadeIn(animationSpeed);
 }
-function showJoin(){
+function showJoin() {
     $('.basic-element').hide();
-    $('#join-box').fadeIn(1200);
+    $('#join-box').fadeIn(animationSpeed);
 }
-function showBarBox(){
+function showBarBox() {
     $('.basic-element').hide();
-    $('#bars-box').fadeIn(1200);
+    $('#bars-box').fadeIn(animationSpeed);
 }
-function showArena(){
+function showArena() {
     $('.basic-element').hide();
-    $('#arena').fadeIn(1200);
+    $('#arena').fadeIn(animationSpeed);
 }
-function showBars(){
+function showBars() {
     $('.basic-element').hide();
-    $('#bars-box').fadeIn(1200);
+    $('#bars-box').fadeIn(animationSpeed);
 }
-function joinTable(){
+function joinTable() {
 
 }
-function registerUser(){
+function registerUser() {
     var loginName = $('#username-join').val();
     var userPass = $('#password-join').val();
     var userPass2 = $('#password-2-join').val();
-    if(userPass === userPass2){
+    if (userPass === userPass2) {
         var pass = SHA1(userPass);
 
         var data = {
-            "username" : loginName,
-            "password" : pass
+            "username": loginName,
+            "password": pass
         };
-        httpRequester.postJson(baseUrl+'account/register',data,{})
-            .then(function(data){
+        httpRequester.postJson(baseUrl + 'account/register', data, {})
+            .then(function (data) {
                 var DataUserName = data['Username'];
                 var dataSessionKey = data['SessionKey'];
-                localStorage.setItem('userName',DataUserName);
-                localStorage.setItem('sessionKey',dataSessionKey);
+                localStorage.setItem('userName', DataUserName);
+                localStorage.setItem('sessionKey', dataSessionKey);
 
                 checkGameAcces();
-            },function(error){
+            }, function (error) {
                 showError(error);
             });
-    }else{
+    } else {
         showError('Incorrect password!');
     }
 
 }
 
-function checkLogin(){
+function checkLogin() {
 
     var loginName = $('#username-login').val();
     var userPass = $('#password-login').val();
     var passSha1 = SHA1(userPass);
     var data = {
         'username': loginName,
-        'password':passSha1
+        'password': passSha1
     };
-    httpRequester.postJson(baseUrl+'account/login',data,{})
-        .then(function(data){
+    httpRequester.postJson(baseUrl + 'account/login', data, {})
+        .then(function (data) {
 
             var DataUserName = data['Username'];
             var dataSessionKey = data['SessionKey'];
-            localStorage.setItem('userName',DataUserName);
-            localStorage.setItem('sessionKey',dataSessionKey);
-            userName = localStorage.getItem('userName');
+            localStorage.setItem('userName', DataUserName);
+            localStorage.setItem('sessionKey', dataSessionKey);
+
             checkGameAcces();
 
-        },function(error){
+        }, function (error) {
             console.log(error);
             showError(error);
         });
 }
 
 
-function showError(error){
+function showError(error) {
     var text = '';
-    if(typeof(error) == "object"){
-            var err  = JSON.parse(error.responseText);
+    if (typeof(error) == "object") {
+        var err = JSON.parse(error.responseText);
         text = err['Message'];
-    }else{
+    } else {
         text = error;
     }
-    $('#error-dialog').html(text).dialog({modal:true});
+    $('#error-dialog').html(text).dialog({modal: true});
 }
 
-function logOut(){
-    var sk =  localStorage.getItem('sessionKey');
+function logOut() {
+    var sk = localStorage.getItem('sessionKey');
     var headers = {
-        'X-SessionKey' :sk
+        'X-SessionKey': sk
     }
-    httpRequester.putJson(baseUrl+'account/logout',{},headers)
-        .then(function(data){
+    httpRequester.putJson(baseUrl + 'account/logout', {}, headers)
+        .then(function (data) {
+            $('#user-box').fadeOut(animationSpeed);
             localStorage.removeItem('userName');
             localStorage.removeItem('sessionKey');
             location.reload();
             checkGameAcces();
-        },function(error){
+        }, function (error) {
             showError(error);
         });
 }
