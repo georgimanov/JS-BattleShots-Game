@@ -1,136 +1,174 @@
-/*
-CryptoJS v3.1.2
-code.google.com/p/crypto-js
-(c) 2009-2013 by Jeff Mott. All rights reserved.
-code.google.com/p/crypto-js/wiki/License
-*/
-(function () {
-    // Shortcuts
-    var C = CryptoJS;
-    var C_lib = C.lib;
-    var WordArray = C_lib.WordArray;
-    var Hasher = C_lib.Hasher;
-    var C_algo = C.algo;
+/**
+ *
+ *  Secure Hash Algorithm (SHA1)
+ *  http://www.webtoolkit.info/
+ *
+ **/
 
-    // Reusable object
-    var W = [];
+function SHA1 (msg) {
 
-    /**
-     * SHA-1 hash algorithm.
-     */
-    var SHA1 = C_algo.SHA1 = Hasher.extend({
-        _doReset: function () {
-            this._hash = new WordArray.init([
-                0x67452301, 0xefcdab89,
-                0x98badcfe, 0x10325476,
-                0xc3d2e1f0
-            ]);
-        },
+    function rotate_left(n,s) {
+        var t4 = ( n<<s ) | (n>>>(32-s));
+        return t4;
+    };
 
-        _doProcessBlock: function (M, offset) {
-            // Shortcut
-            var H = this._hash.words;
+    function lsb_hex(val) {
+        var str="";
+        var i;
+        var vh;
+        var vl;
 
-            // Working variables
-            var a = H[0];
-            var b = H[1];
-            var c = H[2];
-            var d = H[3];
-            var e = H[4];
+        for( i=0; i<=6; i+=2 ) {
+            vh = (val>>>(i*4+4))&0x0f;
+            vl = (val>>>(i*4))&0x0f;
+            str += vh.toString(16) + vl.toString(16);
+        }
+        return str;
+    };
 
-            // Computation
-            for (var i = 0; i < 80; i++) {
-                if (i < 16) {
-                    W[i] = M[offset + i] | 0;
-                } else {
-                    var n = W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16];
-                    W[i] = (n << 1) | (n >>> 31);
-                }
+    function cvt_hex(val) {
+        var str="";
+        var i;
+        var v;
 
-                var t = ((a << 5) | (a >>> 27)) + e + W[i];
-                if (i < 20) {
-                    t += ((b & c) | (~b & d)) + 0x5a827999;
-                } else if (i < 40) {
-                    t += (b ^ c ^ d) + 0x6ed9eba1;
-                } else if (i < 60) {
-                    t += ((b & c) | (b & d) | (c & d)) - 0x70e44324;
-                } else /* if (i < 80) */ {
-                    t += (b ^ c ^ d) - 0x359d3e2a;
-                }
+        for( i=7; i>=0; i-- ) {
+            v = (val>>>(i*4))&0x0f;
+            str += v.toString(16);
+        }
+        return str;
+    };
 
-                e = d;
-                d = c;
-                c = (b << 30) | (b >>> 2);
-                b = a;
-                a = t;
+
+    function Utf8Encode(string) {
+        string = string.replace(/\r\n/g,"\n");
+        var utftext = "";
+
+        for (var n = 0; n < string.length; n++) {
+
+            var c = string.charCodeAt(n);
+
+            if (c < 128) {
+                utftext += String.fromCharCode(c);
+            }
+            else if((c > 127) && (c < 2048)) {
+                utftext += String.fromCharCode((c >> 6) | 192);
+                utftext += String.fromCharCode((c & 63) | 128);
+            }
+            else {
+                utftext += String.fromCharCode((c >> 12) | 224);
+                utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+                utftext += String.fromCharCode((c & 63) | 128);
             }
 
-            // Intermediate hash value
-            H[0] = (H[0] + a) | 0;
-            H[1] = (H[1] + b) | 0;
-            H[2] = (H[2] + c) | 0;
-            H[3] = (H[3] + d) | 0;
-            H[4] = (H[4] + e) | 0;
-        },
-
-        _doFinalize: function () {
-            // Shortcuts
-            var data = this._data;
-            var dataWords = data.words;
-
-            var nBitsTotal = this._nDataBytes * 8;
-            var nBitsLeft = data.sigBytes * 8;
-
-            // Add padding
-            dataWords[nBitsLeft >>> 5] |= 0x80 << (24 - nBitsLeft % 32);
-            dataWords[(((nBitsLeft + 64) >>> 9) << 4) + 14] = Math.floor(nBitsTotal / 0x100000000);
-            dataWords[(((nBitsLeft + 64) >>> 9) << 4) + 15] = nBitsTotal;
-            data.sigBytes = dataWords.length * 4;
-
-            // Hash final blocks
-            this._process();
-
-            // Return final computed hash
-            return this._hash;
-        },
-
-        clone: function () {
-            var clone = Hasher.clone.call(this);
-            clone._hash = this._hash.clone();
-
-            return clone;
         }
-    });
 
-    /**
-     * Shortcut function to the hasher's object interface.
-     *
-     * @param {WordArray|string} message The message to hash.
-     *
-     * @return {WordArray} The hash.
-     *
-     * @static
-     *
-     * @example
-     *
-     *     var hash = CryptoJS.SHA1('message');
-     *     var hash = CryptoJS.SHA1(wordArray);
-     */
-    C.SHA1 = Hasher._createHelper(SHA1);
+        return utftext;
+    };
 
-    /**
-     * Shortcut function to the HMAC's object interface.
-     *
-     * @param {WordArray|string} message The message to hash.
-     * @param {WordArray|string} key The secret key.
-     *
-     * @return {WordArray} The HMAC.
-     *
-     * @static
-     *
-     * @example
-     *
-     *     var hmac = CryptoJS.HmacSHA1(message, key);
-     */
-    C.HmacSHA1 = Hasher._createHmacHelper(SHA1);
-}());
+    var blockstart;
+    var i, j;
+    var W = new Array(80);
+    var H0 = 0x67452301;
+    var H1 = 0xEFCDAB89;
+    var H2 = 0x98BADCFE;
+    var H3 = 0x10325476;
+    var H4 = 0xC3D2E1F0;
+    var A, B, C, D, E;
+    var temp;
+
+    msg = Utf8Encode(msg);
+
+    var msg_len = msg.length;
+
+    var word_array = new Array();
+    for( i=0; i<msg_len-3; i+=4 ) {
+        j = msg.charCodeAt(i)<<24 | msg.charCodeAt(i+1)<<16 |
+            msg.charCodeAt(i+2)<<8 | msg.charCodeAt(i+3);
+        word_array.push( j );
+    }
+
+    switch( msg_len % 4 ) {
+        case 0:
+            i = 0x080000000;
+            break;
+        case 1:
+            i = msg.charCodeAt(msg_len-1)<<24 | 0x0800000;
+            break;
+
+        case 2:
+            i = msg.charCodeAt(msg_len-2)<<24 | msg.charCodeAt(msg_len-1)<<16 | 0x08000;
+            break;
+
+        case 3:
+            i = msg.charCodeAt(msg_len-3)<<24 | msg.charCodeAt(msg_len-2)<<16 | msg.charCodeAt(msg_len-1)<<8    | 0x80;
+            break;
+    }
+
+    word_array.push( i );
+
+    while( (word_array.length % 16) != 14 ) word_array.push( 0 );
+
+    word_array.push( msg_len>>>29 );
+    word_array.push( (msg_len<<3)&0x0ffffffff );
+
+
+    for ( blockstart=0; blockstart<word_array.length; blockstart+=16 ) {
+
+        for( i=0; i<16; i++ ) W[i] = word_array[blockstart+i];
+        for( i=16; i<=79; i++ ) W[i] = rotate_left(W[i-3] ^ W[i-8] ^ W[i-14] ^ W[i-16], 1);
+
+        A = H0;
+        B = H1;
+        C = H2;
+        D = H3;
+        E = H4;
+
+        for( i= 0; i<=19; i++ ) {
+            temp = (rotate_left(A,5) + ((B&C) | (~B&D)) + E + W[i] + 0x5A827999) & 0x0ffffffff;
+            E = D;
+            D = C;
+            C = rotate_left(B,30);
+            B = A;
+            A = temp;
+        }
+
+        for( i=20; i<=39; i++ ) {
+            temp = (rotate_left(A,5) + (B ^ C ^ D) + E + W[i] + 0x6ED9EBA1) & 0x0ffffffff;
+            E = D;
+            D = C;
+            C = rotate_left(B,30);
+            B = A;
+            A = temp;
+        }
+
+        for( i=40; i<=59; i++ ) {
+            temp = (rotate_left(A,5) + ((B&C) | (B&D) | (C&D)) + E + W[i] + 0x8F1BBCDC) & 0x0ffffffff;
+            E = D;
+            D = C;
+            C = rotate_left(B,30);
+            B = A;
+            A = temp;
+        }
+
+        for( i=60; i<=79; i++ ) {
+            temp = (rotate_left(A,5) + (B ^ C ^ D) + E + W[i] + 0xCA62C1D6) & 0x0ffffffff;
+            E = D;
+            D = C;
+            C = rotate_left(B,30);
+            B = A;
+            A = temp;
+        }
+
+        H0 = (H0 + A) & 0x0ffffffff;
+        H1 = (H1 + B) & 0x0ffffffff;
+        H2 = (H2 + C) & 0x0ffffffff;
+        H3 = (H3 + D) & 0x0ffffffff;
+        H4 = (H4 + E) & 0x0ffffffff;
+
+    }
+
+    var temp = cvt_hex(H0) + cvt_hex(H1) + cvt_hex(H2) + cvt_hex(H3) + cvt_hex(H4);
+
+    return temp.toLowerCase();
+
+}

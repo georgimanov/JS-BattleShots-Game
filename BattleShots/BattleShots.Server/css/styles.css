@@ -157,5 +157,9 @@ main {
     height: 45px;
     background-color: #fcf1c3;
 }
-    
+.hidden{
+    display: none;
+}
+#error-dialog > .ui-dialog-titlebar-close{
+    display: none;
 }
