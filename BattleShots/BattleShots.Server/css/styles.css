@@ -214,6 +214,7 @@ main {
     background-color: rgba(185, 206, 114,0.7);
     margin: 10px;
     border: 2px solid rgba(185, 206, 114,1);
+    float: left;
 }
 
 .log-table{
@@ -237,15 +238,56 @@ main {
     padding-left: 5px;
     background-color: rgba(239, 239, 143,0.8);
     outline: none;
-
 }
-.table-cell .btn{
+.table-cell >.btn{
     background-color: #F1DA2D;
     border: 0;
     border-radius: 5px;
     padding: 5px 25px;
-    margin: 5px;
+    margin-top: 10px;
     font-size: 20px;
-
-
 }
+
+.create-table-form .btn{
+    background-color: #F1DA2D;
+    border: 0;
+    border-radius: 5px;
+    padding: 5px 25px;
+    font-size: 20px;
+    float: right;
+    margin-right: 20px;
+    margin-bottom: 5px;
+}
+
+.create-table-form{
+    position: relative;
+    float: right;
+    display: table;
+    width: 30%;
+    border-radius: 5px;
+    background-color: rgba(185, 206, 114,0.7);
+    margin: 10px;
+    border: 2px solid rgba(185, 206, 114,1);
+    padding-top: 30px;
+}
+
+.create-table-form {
+    padding-left: 20px;
+    font-size: 24px;
+}
+.create-table-form label{
+    line-height: 50px
+}
+
+.create-table-form label input {
+    width: 200px;
+    height: 25px;
+    border-radius: 3px;
+    border: 1px solid rgba(185, 206, 114,0.7);
+    padding-left: 5px;
+    background-color: rgba(239, 239, 143,0.8);
+    outline: none;
+    float: right;
+    margin: 10px 20px;
+}
+
