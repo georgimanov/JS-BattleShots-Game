@@ -36,14 +36,11 @@ function showBarBox(){
 }
 function showArena(){
     $('.basic-element').hide();
-    $('#rooms-lobby').fadeIn(1200);
+    $('#arena').fadeIn(1200);
 }
 function showBars(){
-     userName = localStorage.getItem('userName');
-    $('#login-box').addClass('hidden');
-    $('#bars-box').removeClass('hidden');
-    $('#username').html(userName);
-    $('#error-dialog').dialog('close');
+    $('.basic-element').hide();
+    $('#bars-box').fadeIn(1200);
 }
 function joinTable(){
 
@@ -71,8 +68,7 @@ function registerUser(){
                 showError(error);
             });
     }else{
-        alert('ne6to');
-        showError({"responseText" : {"Message":"Invalid password."}});
+        showError('Incorrect password!');
     }
 
 }
@@ -93,19 +89,25 @@ function checkLogin(){
             var dataSessionKey = data['SessionKey'];
             localStorage.setItem('userName',DataUserName);
             localStorage.setItem('sessionKey',dataSessionKey);
-
+            userName = localStorage.getItem('userName');
             checkGameAcces();
+
         },function(error){
+            console.log(error);
             showError(error);
         });
 }
 
 
 function showError(error){
-    console.lo9
-    var err = JSON.parse(error['responseText']['Message']);
-   console.log(err);
-    $('#error-dialog').html(err).dialog({modal:true});
+    var text = '';
+    if(typeof(error) == "object"){
+            var err  = JSON.parse(error.responseText);
+        text = err['Message'];
+    }else{
+        text = error;
+    }
+    $('#error-dialog').html(text).dialog({modal:true});
 }
 
 function logOut(){
@@ -115,7 +117,6 @@ function logOut(){
     }
     httpRequester.putJson(baseUrl+'account/logout',{},headers)
         .then(function(data){
-            alert('data: ' + data);
             localStorage.removeItem('userName');
             localStorage.removeItem('sessionKey');
             location.reload();
