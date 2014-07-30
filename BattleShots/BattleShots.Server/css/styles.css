@@ -288,3 +288,104 @@ main {
     margin: 10px 20px;
 }
 
+#login-box{
+    display: flex;
+    font-family: Consolas;
+    width: 80%;
+    border-radius: 5px;
+    background-color: rgba(185, 206, 114,0.7);
+    border: 2px solid rgba(185, 206, 114,1);
+    margin: 20px auto;
+    padding: 50px;
+    align-content: flex-end;
+}
+#login-box .login-from{
+    width: 90%;
+    margin: 20px auto;
+    display: block;
+    float: right;
+}
+
+#login-box .login-from p{
+    line-height: 40px;
+    font-size: 36px;
+    font-weight: bold;
+}
+#login-box .login-from label{
+    font-size: 28px;
+    line-height: 30px;
+}
+
+#login-box .login-from input{
+    box-sizing: border-box;
+    width: 200px;
+    height: 25px;
+    border-radius: 3px;
+    border: 1px solid rgba(185, 206, 114,0.7);
+    padding-left: 5px;
+    background-color: rgba(239, 239, 143,0.8);
+    outline: none;
+    margin: 10px 20px;
+    color: #ffffff;
+}
+
+
+#login-box .login-from a{
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24px;
+    margin-right: 20px;
+    margin-left: 90px;
+}
+
+#join-box{
+    display: flex;
+    font-family: Consolas;
+    width: 80%;
+    border-radius: 5px;
+    background-color: rgba(185, 206, 114,0.7);
+    border: 2px solid rgba(185, 206, 114,1);
+    margin: 20px auto;
+    padding: 50px;
+    align-content: flex-end;
+}
+
+#join-form{
+    width: 90%;
+    margin: 20px auto;
+    display: block;
+    float: right;
+}
+
+
+#join-form > p{
+    line-height: 40px;
+    font-size: 36px;
+    font-weight: bold;
+}
+#join-form label{
+    font-size: 28px;
+    line-height: 30px;
+}
+
+#join-form input{
+    box-sizing: border-box;
+    width: 200px;
+    height: 25px;
+    border-radius: 3px;
+    border: 1px solid rgba(185, 206, 114,0.7);
+    padding-left: 5px;
+    background-color: rgba(239, 239, 143,0.8);
+    outline: none;
+    margin: 10px 20px;
+    color: #ffffff;
+}
+
+
+#join-form a{
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 24px;
+    margin-right: 20px;
+    margin-left: 80px;
+}
