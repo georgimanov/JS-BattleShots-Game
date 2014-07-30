@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 <head lang="en">
     <meta charset="UTF-8">
     <title>BattleShots</title>
@@ -21,27 +21,25 @@
     </div>
 </header>
 <div id="login-box" class=" full hidden basic-element">
-
-    <form id="login-form" >
-        Login <br />
-        <input type='text' id="username-login" /><br/>
-        <input type='password' id="password-login"/><br />
+    <div class="login-from" id="login-form" >
+        <p>Login</p>
+        <label>Username:<input type='text' id="username-login" /></label><br/>
+        <label>Password:<input type='password' id="password-login"/></label><br/>
         <a href="javascript: checkLogin()">Login</a>
         <a href="#" onclick="showJoin()">Register</a>
-    </form>
+    </div>
 
 </div>
 <div id="join-box" class="hidden full basic-element">
-    <form id="join-form">
-        Join <br />
-        <input type='text' id="username-join" /><br/>
-        <input type='password' id="password-join"/><br />
-        <input type='password' id="password-2-join"/><br />
+    <div id="join-form">
+        <p>Join</p>
+        <label>Username:<input type='text' id="username-join" /></label><br/>
+        <label>Password:<input type='password' id="password-join"/></label><br />
+        <label>Confirm: <input type='password' id="password-2-join"/></label><br />
         <a href="javascript: registerUser()">Join</a>
         <a href="#" onclick="showLogin()">Go to login</a>
 
-
-    </form>
+    </div>
 </div>
 <div id="bars-box" class="hidden full basic-element">
 
@@ -343,12 +341,7 @@
 </div>
 </main>
 </div>
-<style>
-.full{
-    width: 100%;
-    background: lawngreen;
-}
-</style>
+
 <div id="error-dialog" title="Грешка!" class="hidden"></div>
 <script src="Scripts/jquery-1.11.1.min.js"></script>
 <script src="Scripts/jquery.signalR-2.1.1.js"></script>
