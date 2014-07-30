@@ -79,7 +79,18 @@ function showError(error){
 }
 
 function logOut(){
-    localStorage.removeItem('userName');
-    localStorage.removeItem('sessionKey');
-    location.reload();
+    var sk =  localStorage.getItem('sessionKey');
+    var headers = {
+        'X-SessionKey' :sk
+    }
+    httpRequester.putJson(baseUrl+'account/logout',{},headers)
+        .then(function(data){
+            alert('data: ' + data);
+            localStorage.removeItem('userName');
+            localStorage.removeItem('sessionKey');
+            location.reload();
+            checkGameAcces();
+        },function(error){
+            showError(error);
+        });
 }
