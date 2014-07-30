@@ -1,6 +1,7 @@
 var baseUrl = "http://localhost:32033/api/";
 //var baseUrl = "http://battleshots-1.apphb.com/api/";
 var gameAcces = false;
+var selectBar = false;
 var userName = localStorage.getItem('userName');
 if(userName == null){
     userName = "Example User";
@@ -11,41 +12,68 @@ $(document).ready(function(){
 
 function checkGameAcces(){
     if(localStorage.getItem("sessionKey") == null){
-        $('#dialog').dialog({modal:true});
+        showLogin();
     }else{
-        RunGame();
+       if(selectBar == true){
+           showArena();
+       }else{
+           showBars();
+       }
     }
 }
 
-function RunGame(){
+function showLogin(){
+    $('.basic-element').hide();
+    $('#login-box').fadeIn(1200);
+}
+function showJoin(){
+    $('.basic-element').hide();
+    $('#join-box').fadeIn(1200);
+}
+function showBarBox(){
+    $('.basic-element').hide();
+    $('#bars-box').fadeIn(1200);
+}
+function showArena(){
+    $('.basic-element').hide();
+    $('#rooms-lobby').fadeIn(1200);
+}
+function showBars(){
      userName = localStorage.getItem('userName');
+    $('#login-box').addClass('hidden');
+    $('#bars-box').removeClass('hidden');
     $('#username').html(userName);
-    $('#dialog').dialog('close');
     $('#error-dialog').dialog('close');
+}
+function joinTable(){
 
 }
 function registerUser(){
     var loginName = $('#username-join').val();
     var userPass = $('#password-join').val();
-    var pass = SHA1(userPass);
+    var userPass2 = $('#password-2-join').val();
+    if(userPass === userPass2){
+        var pass = SHA1(userPass);
 
-    var data = {
-        "username" : loginName,
-        "password" : pass
-    };
+        var data = {
+            "username" : loginName,
+            "password" : pass
+        };
+        httpRequester.postJson(baseUrl+'account/register',data,{})
+            .then(function(data){
+                var DataUserName = data['Username'];
+                var dataSessionKey = data['SessionKey'];
+                localStorage.setItem('userName',DataUserName);
+                localStorage.setItem('sessionKey',dataSessionKey);
 
-    httpRequester.postJson(baseUrl+'account/register',data,{})
-        .then(function(data){
-         var DataUserName = data['Username'];
-         var dataSessionKey = data['SessionKey'];
-         localStorage.setItem('userName',DataUserName);
-         localStorage.setItem('sessionKey',dataSessionKey);
-
-         checkGameAcces();
+                checkGameAcces();
             },function(error){
-        showError(error);
-        });
-
+                showError(error);
+            });
+    }else{
+        alert('ne6to');
+        showError({"responseText" : {"Message":"Invalid password."}});
+    }
 
 }
 
@@ -74,9 +102,10 @@ function checkLogin(){
 
 
 function showError(error){
-    var responseText = JSON.parse(error['responseText']);
-    var text = responseText.Message;
-    $('#error-dialog').html(text).dialog({modal:true});
+    console.lo9
+    var err = JSON.parse(error['responseText']['Message']);
+   console.log(err);
+    $('#error-dialog').html(err).dialog({modal:true});
 }
 
 function logOut(){

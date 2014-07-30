@@ -20,10 +20,35 @@
         </div>
     </div>
 </header>
-<div id="login-box" class="hidden"></div>
-<div id="join-box" class="hidden"></div>
-<div id="bars-box" class="hidden"></div>
-<div id="rooms-lobby" class="hidden">
+<div id="login-box" class=" full hidden basic-element">
+
+    <form id="login-form" >
+        Login <br />
+        <input type='text' id="username-login" /><br/>
+        <input type='password' id="password-login"/><br />
+        <a href="javascript: checkLogin()">Login</a>
+        <a href="#" onclick="showJoin()">Register</a>
+    </form>
+
+</div>
+<div id="join-box" class="hidden full basic-element">
+    <form id="join-form">
+        Join <br />
+        <input type='text' id="username-join" /><br/>
+        <input type='password' id="password-join"/><br />
+        <input type='password' id="password-2-join"/><br />
+        <a href="javascript: registerUser()">Join</a>
+        <a href="#" onclick="showLogin()">Go to login</a>
+
+
+    </form>
+</div>
+<div id="bars-box" class="hidden full basic-element">
+
+
+
+</div>
+<div id="arena" class="hidden full basic-element">
 <aside>
     <h1>ЗАПИВКА</h1>
     <h3>маси:</h3>
@@ -318,25 +343,12 @@
 </div>
 </main>
 </div>
-<div id="dialog" class='hidden'>
-    <div id="login-join-form" >
-        <form id="login-form" >
-            Login <br />
-            <input id="username-login" /><br/>
-            <input id="password-login"/><br />
-            <a href="javascript: checkLogin()">Login</a>
-        </form>
-
-        <hr />
-
-        <form id="join-form">
-            Join <br />
-            <input id="username-join" /><br/>
-            <input id="password-join"/><br />
-            <a href="javascript: registerUser()">Join</a>
-        </form>
-    </div>
-</div>
+<style>
+.full{
+    width: 100%;
+    background: lawngreen;
+}
+</style>
 <div id="error-dialog" title="Грешка!" class="hidden"></div>
 <script src="Scripts/jquery-1.11.1.min.js"></script>
 <script src="Scripts/jquery.signalR-2.1.1.js"></script>
