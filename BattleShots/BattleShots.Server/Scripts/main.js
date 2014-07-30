@@ -1,4 +1,5 @@
 var baseUrl = "http://localhost:32033/api/";
+//var baseUrl = "http://battleshots-1.apphb.com/api/";
 var gameAcces = false;
 var userName = localStorage.getItem('userName');
 if(userName == null){
@@ -74,7 +75,7 @@ function checkLogin(){
 
 function showError(error){
     var responseText = JSON.parse(error['responseText']);
-    var text = responseText['Message'];
+    var text = responseText.Message;
     $('#error-dialog').html(text).dialog({modal:true});
 }
 
