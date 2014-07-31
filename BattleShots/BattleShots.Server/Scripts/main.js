@@ -1,3 +1,58 @@
+
+var result2 = {
+    MyBoard: "00bBBB00000000000000000P000000000P00000000000000000000AAAAA000000000000000000DDD0000000000000000SSS0",
+    OpponentBoardBoard: "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+};
+
+function DrowArena(idPattern,obj,param ){
+
+//var myBoardArr = [];
+    for (var i = 0 ;i < 10; i++) {
+//    myBoardArr[i] = [];
+        for (var j = 0; j < 10; j++) {
+//         myBoardArr[i][j] = result2.MyBoard[i * 10 + j];
+            var MyBoardChar = (obj[param][i * 10 + j]).toString();
+            var myBoardId = idPattern+"-"+(i+1)+"-"+ (j+1);
+            switch(MyBoardChar){
+                case "0" : break;
+                case "~" : $('#'+myBoardId).addClass('hit-water');
+                    break;
+                case "*" : $('#'+myBoardId).addClass('hit-ship');
+                    break;
+                case "A" : $('#'+myBoardId).addClass('aircraft-carrier');
+                    break;
+                case "B" : $('#'+myBoardId).addClass('battleship');
+                    break;
+                case "S" : $('#'+myBoardId).addClass('submarine');
+                    break;
+                case "D" : $('#'+myBoardId).addClass('destroyer');
+                    break;
+                case "P" : $('#'+myBoardId).addClass('patrol-boat');
+                    break;
+                case "a" : $('#'+myBoardId).addClass('aircraft-carrier-demage');
+                    break;
+                case "b" : $('#'+myBoardId).addClass('battleship-demage');
+                    break;
+                case "c" : $('#'+myBoardId).addClass('submarine-demage');
+                    break;
+                case "d" : $('#'+myBoardId).addClass('destroyer-demage');
+                    break;
+                case "e" : $('#'+myBoardId).addClass('patrol-boat-demage');
+                    break;
+            }
+        }
+    }
+}
+
+var opponentBoardArr = [];
+for (var i = 0; i < 10; i++) {
+    opponentBoardArr[i] = [];
+    for (var j = 0; j < 10; j++) {
+        opponentBoardArr[i][j] = result2.OpponentBoardBoard[i * 10 + j];
+    }
+}
+
+
 // var baseUrl = "http://localhost:32033/api/";
 var baseUrl = "http://battleshots-1.apphb.com/api/";
 var gameAcces = false;
@@ -71,23 +126,8 @@ function showArena(gameId) {
     data.battle.random(gameId).then(function (result) {
         data.battle.state(gameId).then(function (result2) {
             var id = result2.Id;
-            var myBoardArr = [];
-            for (var i = 0; i < 10; i++) {
-                myBoardArr[i] = [];
-                for (var j = 0; j < 10; j++) {
-                    myBoardArr[i][j] = result2.MyBoard[i * 10 + j];
-                }
-            }
-
-            var opponentBoardArr = [];
-            for (var i = 0; i < 10; i++) {
-                opponentBoardArr[i] = [];
-                for (var j = 0; j < 10; j++) {
-                    opponentBoardArr[i][j] = result2.OpponentBoardBoard[i * 10 + j];
-                }
-            }
-
-
+            DrowArena('mine-',result2,"MyBoard");
+            DrowArena('opp-',result2,"OpponentBoard");
         }, function (err) {
             showError(err);
         });
@@ -109,19 +149,19 @@ function showBars() {
         var id = e.target.id;
         var pass = $(e.target).parent().parent().find("input").val();
         data.games.join(id, pass)
-        .then(function (res) {
-            selectBar = true;
-            $.connection.hub.start()
-            .done(function () {
-                game.server.storeConnectionId(false, id);
-                game.server.informPlayer(id, false);
+            .then(function (res) {
+                selectBar = true;
+                $.connection.hub.start()
+                    .done(function () {
+                        game.server.storeConnectionId(false, id);
+                        game.server.informPlayer(id, false);
+                    });
+                selectBar = true;
+                showArena(id);
+            },
+            function (err) {
+                showError(err);
             });
-            selectBar = true;
-            showArena(id);
-        },
-        function (err) {
-            showError(err);
-        });
     });
     $("<div />").load("Partials/lobby-tables.html", function (html) {
         data.games.open()
@@ -135,20 +175,20 @@ function showBars() {
             });
         setInterval(function () {
             data.games.open()
-            .then(function (res) {
-                var values = [];
-                $("#bars-box input").each(function () {
-                    values.push($(arguments[1]).val());
-                });
+                .then(function (res) {
+                    var values = [];
+                    $("#bars-box input").each(function () {
+                        values.push($(arguments[1]).val());
+                    });
 
-                $("#bars-box").html("");
-                $(res).each(function (el) {
-                    var result = parseTemplate(html, { title: res[el].Title, i: res[el].Id, pwd: values[el] });
-                    $("#bars-box").append(result);
+                    $("#bars-box").html("");
+                    $(res).each(function (el) {
+                        var result = parseTemplate(html, { title: res[el].Title, i: res[el].Id, pwd: values[el] });
+                        $("#bars-box").append(result);
+                    });
+                }, function (error) {
+                    showError(error);
                 });
-            }, function (error) {
-                showError(error);
-            });
         }, 5000);
     });
 
@@ -161,19 +201,19 @@ function showBars() {
             if (tablePass == confirmPass) {
                 var pass = SHA1(tablePass);
                 data.games.newGame(tableName, tablePass)
-                .then(function (r) {
-                    $("#table-name").val("");
-                    $("#table-pass").val("");
-                    $("#confirm-pass").val("");
-                    $.connection.hub.start()
-                    .done(function () {
-                        game.server.storeConnectionId(true, r.Id);
-                        selectBar = true;
-                        checkGameAcces(r.Id);
+                    .then(function (r) {
+                        $("#table-name").val("");
+                        $("#table-pass").val("");
+                        $("#confirm-pass").val("");
+                        $.connection.hub.start()
+                            .done(function () {
+                                game.server.storeConnectionId(true, r.Id);
+                                selectBar = true;
+                                checkGameAcces(r.Id);
+                            });
+                    }, function (err) {
+                        showError(err);
                     });
-                }, function (err) {
-                    showError(err);
-                });
             }
             else {
                 showError('The passwords do not match.');
