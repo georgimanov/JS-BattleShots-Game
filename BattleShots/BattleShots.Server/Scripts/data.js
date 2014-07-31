@@ -74,6 +74,10 @@ window.dataRepositories = (function () {
             return httpRequester.getJson(this.url + "state/" + id, {}, headers);
         },
 
+        random: function (id) {
+            return httpRequester.postJson(this.url + "random/" + id, {}, {});
+        },
+
         attack: function (id, row, col) {
             var game = {
                 row: row,

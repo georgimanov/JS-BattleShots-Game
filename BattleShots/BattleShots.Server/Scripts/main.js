@@ -67,6 +67,16 @@ function showArena(gameId) {
     $("<div />").load("Partials/arena-table-user.html", function (html) {
         $("main").append(html);
     });
+
+    data.battle.random(gameId).then(function () {
+        data.battle.state(id).then(function (data) {
+            console.log(data);
+        }, function (error) {
+            showError(error);
+        });
+    }, function (error) {
+        showError(error);
+    });
 }
 
 var game = $.connection.gameHub;

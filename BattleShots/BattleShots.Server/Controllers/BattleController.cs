@@ -354,8 +354,10 @@ namespace BattleShots.Server.Controllers
                     {
                         throw new ServerErrorException("The game is not ready to start.", ErrorType.InvalidGame);
                     }
-
-                    int playerNumber = 0;
+                    if (game.FirstPlayerBoard != null && game.SecondPlayerBoard != null)
+                    {
+                        return "";
+                    }
 
                     var first = BoardUtilities.GenerateRandomBoard();
                     var second = BoardUtilities.GenerateRandomBoard();
