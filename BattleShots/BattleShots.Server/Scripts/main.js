@@ -35,21 +35,21 @@ function showJoin() {
     $('.basic-element').hide();
     $('#join-box').fadeIn(animationSpeed);
 }
-function showArena() {
+function showArena(gameId) {
     $('.basic-element').hide();
     $('#arena').fadeIn(animationSpeed);
 }
 
 function showBars() {
     $('.basic-element').hide();
-    $('#bars-box').show();
+    $('#bars-box').fadeIn(animationSpeed);
     $('#bars-box').on("click", ".table-cell .btn", function (e) {
         var id = e.target.id;
         var pass = $(e.target).parent().parent().find("input").val();
-        console.log(pass);
         data.games.join(id, pass)
         .then(function (data) {
-            console.log(data);
+            selectBar = true;
+            showArena(id);
         },
         function (err) {
             showError(error);
@@ -59,7 +59,7 @@ function showBars() {
         data.games.open()
             .then(function (data) {
                 $(data).each(function (el) {
-                    var result = parseTemplate(html, { title: data[el].Title, i: data[el].Id });
+                    var result = parseTemplate(html, { title: data[el].Title, i: data[el].Id, pwd: "" });
                     $("#bars-box").append(result);
                 });
             }, function (error) {
@@ -68,9 +68,14 @@ function showBars() {
         setInterval(function () {
             data.games.open()
             .then(function (data) {
+                var values = [];
+                $("#bars-box input").each(function () {
+                    values.push($(arguments[1]).val());
+                });
+
                 $("#bars-box").html("");
                 $(data).each(function (el) {
-                    var result = parseTemplate(html, { title: data[el].Title, i: data[el].Id });
+                    var result = parseTemplate(html, { title: data[el].Title, i: data[el].Id, pwd: values[el] });
                     $("#bars-box").append(result);
                 });
             }, function (error) {

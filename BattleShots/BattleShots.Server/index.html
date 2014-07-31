@@ -43,40 +43,6 @@
     <div id="create-table-form"></div>
     <div id="bars-box" class="full basic-element"></div>
     <div id="arena" class="hidden full basic-element">
-        <aside>
-            <h1>ЗАПИВКА</h1>
-            <h3>маси:</h3>
-            <div id="table-list">
-                <div class="full-table">
-                    <hr>
-                    <span class="table-name">маса1</span>
-                    <span class="player-count">2/2</span>
-                    <div class="table-state">Пълна</div>
-                </div>
-                <div class="empty-table">
-                    <hr>
-                    <span class="table-name">маса1</span>
-                    <span class="player-count">1/2</span>
-                    <div class="table-state">
-                        <form>
-                            <label for="pass">парола</label>
-                            <input type="password" id="pass" required>
-                            <input type="submit" value="GO">
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <div id="create-table">
-                <h1>Създай маса</h1>
-                <form>
-                    <label for="table-name">име:</label>
-                    <input type="text" id="table-name" required>
-                    <label for="table-pass">парола:</label>
-                    <input type="password" id="table-pass" required>
-                    <input type="submit" value="създай">
-                </form>
-            </div>
-        </aside>
         <main>
             <div id="left-side">
                 <div id="opponent-board">
@@ -338,7 +304,7 @@
         </main>
     </div>
 
-    <div id="error-dialog" title="Грешка!" class="hidden"></div>
+    <div id="error-dialog" title="Error!" class="hidden"></div>
     <script src="Scripts/jquery-1.11.1.min.js"></script>
     <script src="Scripts/jquery.signalR-2.1.1.js"></script>
     <script src="/signalr/hubs"></script>
