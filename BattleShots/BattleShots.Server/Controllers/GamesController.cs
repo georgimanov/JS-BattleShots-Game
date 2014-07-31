@@ -90,7 +90,7 @@ namespace BattleShots.Server.Controllers
                         throw new ServerErrorException("The entered password for this game is wrong.", ErrorType.InvalidPassword);
                     }
 
-                    if (game.State != stateOpen && game.State != InProgressState)
+                    if (game.State != stateOpen && game.State.State != InProgressState)
                     {
                         throw new ServerErrorException("The game is not open.", ErrorType.InvalidGame);
                     }
@@ -101,7 +101,6 @@ namespace BattleShots.Server.Controllers
                     }
 
                     game.SecondPlayer = user;
-                    var stateInProgress = context.GameStates.First(s => s.State == InProgressState);
                     game.State = stateInProgress;
                     context.SaveChanges();
 
