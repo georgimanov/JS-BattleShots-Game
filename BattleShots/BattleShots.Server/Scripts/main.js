@@ -70,12 +70,13 @@ function showArena(gameId) {
 
     data.battle.random(gameId).then(function () {
         data.battle.state(id).then(function (data) {
-            console.log(data);
+            alert(data);
         }, function (error) {
             showError(error);
         });
     }, function (error) {
         showError(error);
+        alert(error);
     });
 }
 
