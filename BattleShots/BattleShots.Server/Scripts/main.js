@@ -10,6 +10,29 @@ if (userName == null) {
 }
 $(document).ready(function () {
     checkGameAcces();
+    $(function () {
+        $('.draggable').draggable({
+            containment: 'parent',
+            cursor: 'move',
+            revert: true
+        });
+    });
+
+    $(function () {
+        $('.grid-box').droppable({
+            drop: handleDrop
+        });
+    });
+
+    function handleDrop(event, ui) {
+        ui.draggable.position({
+            of: $(this),
+            my: 'left top',
+            at: 'left top'
+        });
+        ui.draggable.draggable('option', 'revert', false);
+        ui.draggable.draggable("option", "grid", [52, 52]);
+    }
 });
 
 function checkGameAcces() {
@@ -207,3 +230,4 @@ function logOut() {
             showError(error);
         });
 }
+
