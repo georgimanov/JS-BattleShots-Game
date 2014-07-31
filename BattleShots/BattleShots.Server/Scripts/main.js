@@ -61,21 +61,23 @@ function showJoin() {
 function showArena(gameId) {
     $('.basic-element').hide();
     $('#arena').fadeIn(animationSpeed);
-    $("<div />").load("Partials/arena-table-enemy.html", function (html) {
+    $("<div />").load("Partials/arena-table-user.html", function (html) {
         $("main").append(html);
     });
-
-    $("<div />").load("Partials/arena-table-user.html", function (html) {
+    $("<div />").load("Partials/arena-table-enemy.html", function (html) {
         $("main").append(html);
     });
 
     debugger;
     data.battle.random(gameId).then(function (data) {
-        alert('success');
+        data.battle.state(gameId)
+        .then(function (data) {
+            console.log(data);
+            alert('success');
+        }, function (error) {
+            showError(error);
+        });
     }, function (error) {
-        alert('error');
-
-        debugger;
         showError(error);
     });
 }
