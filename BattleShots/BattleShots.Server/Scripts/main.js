@@ -35,7 +35,7 @@ $(document).ready(function () {
     }
 });
 
-function checkGameAcces() {
+function checkGameAcces(id) {
     if (localStorage.getItem("sessionKey") == null) {
         showLogin();
     } else {
@@ -43,7 +43,7 @@ function checkGameAcces() {
         $('#username').html(userName);
         $('#user-box').fadeIn(animationSpeed);
         if (selectBar == true) {
-            showArena();
+            showArena(id);
         } else {
             showBars();
         }
@@ -61,11 +61,17 @@ function showJoin() {
 function showArena(gameId) {
     $('.basic-element').hide();
     $('#arena').fadeIn(animationSpeed);
+    $("<div />").load("Partials/arena-table-enemy.html", function (html) {
+        $("main").append(html);
+    });
+    $("<div />").load("Partials/arena-table-user.html", function (html) {
+        $("main").append(html);
+    });
 }
 
 var game = $.connection.gameHub;
 game.client.requestBoards = function (gameId) {
-    alert("Request boards called! Game ID: "+ gameId);
+    alert("Request boards called! Game ID: " + gameId);
 };
 
 function showBars() {
@@ -80,14 +86,14 @@ function showBars() {
             selectBar = true;
             $.connection.hub.start()
             .done(function () {
-                debugger;
                 game.server.storeConnectionId(false, id);
                 game.server.informPlayer(id, false);
             });
-            showArena(id);
+            selectBar = true;
+            checkGameAcces(id);
         },
         function (err) {
-            showError(error);
+            showError(err);
         });
     });
     $("<div />").load("Partials/lobby-tables.html", function (html) {
@@ -136,7 +142,8 @@ function showBars() {
                     $.connection.hub.start()
                     .done(function () {
                         game.server.storeConnectionId(true, data.Id);
-                        showArena(data.Id);
+                        selectBar = true;
+                        checkGameAcces();
                     });
                 }, function (err) {
                     showError(err);
@@ -230,4 +237,3 @@ function logOut() {
             showError(error);
         });
 }
-

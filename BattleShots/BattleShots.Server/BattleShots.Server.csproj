@@ -200,6 +200,8 @@
     <Content Include="img\submarine-demage.png" />
     <Content Include="img\submarine.png" />
     <Content Include="index.html" />
+    <Content Include="Partials\arena-table-enemy.html" />
+    <Content Include="Partials\arena-table-user.html" />
     <Content Include="Partials\create-table-form.html" />
     <Content Include="Partials\lobby-tables.html" />
     <Content Include="Partials\simple-board.html" />
