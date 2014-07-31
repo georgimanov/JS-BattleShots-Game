@@ -1,5 +1,5 @@
-var baseUrl = "http://localhost:32033/api/";
-//var baseUrl = "http://battleshots-1.apphb.com/api/";
+// var baseUrl = "http://localhost:32033/api/";
+var baseUrl = "http://battleshots-1.apphb.com/api/";
 var gameAcces = false;
 var selectBar = false;
 var userName = localStorage.getItem('userName');
