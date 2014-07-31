@@ -172,7 +172,7 @@ main {
     height: 45px;
     background-color: #fcf1c3;
     background-repeat:no-repeat;
-    background-position:center
+    background-position:center;
 }
 .hidden{
     display: none;
@@ -210,7 +210,13 @@ main {
 .submarine-demage{
     background-image: url('../img/submarine.png');
 }
+.water{
+    background: red!important;
+}
 
+.not-repeat-bg{
+    background-repeat: no-repeat;
+}
 .table-info{
     display: table;
     width: 60%;
