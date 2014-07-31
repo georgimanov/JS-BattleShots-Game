@@ -41,13 +41,33 @@ function showArena() {
 }
 function showBars() {
     $('.basic-element').hide();
-    $('#bars-box').fadeIn(animationSpeed);
-    data.games.open()
-        .then(function (data) {
-            console.log(data);
-        }, function (error) {
-            showError(error);
+    $('#bars-box').show();
+    $("<div />").load("Partials/lobby-tables.html", function (html) {
+        $(".table-cell").click(".btn", function (e) {
+            console.log(e);
         });
+        data.games.open()
+            .then(function (data) {
+                $(data).each(function (el) {
+                    var result = parseTemplate(html, { title: data[el].Title, i: data[el].Id });
+                    $("#bars-box").append(result);
+                });
+            }, function (error) {
+                showError(error);
+            });
+        setInterval(function () {
+            data.games.open()
+            .then(function (data) {
+                $("#bars-box").html("");
+                $(data).each(function (el) {
+                    var result = parseTemplate(html, { title: data[el].Title, i: data[el].Id });
+                    $("#bars-box").append(result);
+                });
+            }, function (error) {
+                showError(error);
+            });
+        }, 5000);
+    });
     $("#create-table-form").load("Partials/create-table-form.html", function () {
         $("#create-table-form").on("click", "#create-table-btn", function (e) {
             var tableName = $("#table-name").val();
@@ -58,9 +78,10 @@ function showBars() {
                 var pass = SHA1(tablePass);
                 data.games.newGame(tableName, tablePass)
                 .then(function (data) {
-                    console.log(data);
+                    $("#table-name").val("");
+                    $("#table-pass").val("");
+                    $("#confirm-pass").val("");
                 }, function (err) {
-                    console.log(err);
                 });
             }
             else {
