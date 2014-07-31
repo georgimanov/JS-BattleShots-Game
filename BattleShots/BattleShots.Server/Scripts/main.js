@@ -1,5 +1,5 @@
-// var baseUrl = "http://localhost:32033/api/";
-var baseUrl = "http://battleshots-1.apphb.com/api/";
+var baseUrl = "http://localhost:32033/api/";
+//var baseUrl = "http://battleshots-1.apphb.com/api/";
 var gameAcces = false;
 var selectBar = false;
 var userName = localStorage.getItem('userName');
@@ -256,7 +256,6 @@ function DrawArena(idPattern,obj,param ){
 //         myBoardArr[i][j] = result2.MyBoard[i * 10 + j];
             var MyBoardChar = (obj[param][i * 10 + j]).toString();
             var myBoardId = idPattern+"-"+(i+1)+"-"+ (j+1);
-            alert($('#'+myBoardId));
             switch(MyBoardChar){
 
                 case "0" : break;
