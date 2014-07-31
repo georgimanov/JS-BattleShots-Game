@@ -16,6 +16,7 @@ window.dataRepositories = (function () {
         },
 
         newGame: function (title, password) {
+            debugger;
             var game = {
                 title: title,
                 password: SHA1(password)

@@ -4,6 +4,7 @@ var gameAcces = false;
 var selectBar = false;
 var userName = localStorage.getItem('userName');
 var animationSpeed = 1200;
+var data = dataRepositories.get(baseUrl);
 if (userName == null) {
     userName = "Example User";
 }
@@ -39,11 +40,36 @@ function showArena() {
     $('#arena').fadeIn(animationSpeed);
 }
 function showBars() {
-
-    
     $('.basic-element').hide();
     $('#bars-box').fadeIn(animationSpeed);
+    data.games.open()
+        .then(function (data) {
+            console.log(data);
+        }, function (error) {
+            showError(error);
+        });
+    $("#create-table-form").load("Partials/create-table-form.html", function () {
+        $("#create-table-form").on("click", "#create-table-btn", function (e) {
+            var tableName = $("#table-name").val();
+            var tablePass = $("#table-pass").val();
+            var confirmPass = $("#confirm-pass").val();
+
+            if (tablePass == confirmPass) {
+                var pass = SHA1(tablePass);
+                data.games.newGame(tableName, tablePass)
+                .then(function (data) {
+                    console.log(data);
+                }, function (err) {
+                    console.log(err);
+                });
+            }
+            else {
+                showError('The passwords do not match.');
+            }
+        })
+    });
 }
+
 function registerUser() {
     var loginName = $('#username-join').val();
     var userPass = $('#password-join').val();
@@ -100,13 +126,13 @@ function checkLogin() {
 
 function showError(error) {
     var text = '';
-    if (typeof(error) == "object") {
+    if (typeof (error) == "object") {
         var err = JSON.parse(error.responseText);
         text = err['Message'];
     } else {
         text = error;
     }
-    $('#error-dialog').html(text).dialog({modal: true});
+    $('#error-dialog').html(text).dialog({ modal: true });
 }
 
 function logOut() {
