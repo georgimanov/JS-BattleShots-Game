@@ -40,15 +40,26 @@ function showArena(gameId) {
     $('#arena').fadeIn(animationSpeed);
 }
 
+var game = $.connection.gameHub;
+game.client.storeConnectionId = function () {
+    console.log(arguments);
+};
+
 function showBars() {
     $('.basic-element').hide();
     $('#bars-box').fadeIn(animationSpeed);
+
     $('#bars-box').on("click", ".table-cell .btn", function (e) {
         var id = e.target.id;
         var pass = $(e.target).parent().parent().find("input").val();
         data.games.join(id, pass)
         .then(function (data) {
             selectBar = true;
+            $.connection.hub.start()
+            .done(function () {
+                debugger;
+                game.server.storeConnectionId(false, id);
+            });
             showArena(id);
         },
         function (err) {
@@ -97,7 +108,12 @@ function showBars() {
                     $("#table-name").val("");
                     $("#table-pass").val("");
                     $("#confirm-pass").val("");
+                    $.connection.hub.start()
+                    .done(function () {
+                        game.server.storeConnectionId(true, data.Id);
+                    });
                 }, function (err) {
+                    showError(err);
                 });
             }
             else {
