@@ -37,7 +37,6 @@ window.dataRepositories = (function () {
             var headers = {
                 "X-SessionKey": localStorage.getItem("sessionKey")
             };
-            debugger;
             return httpRequester.postJson(this.url + "join/" + id, game, headers);
         },
 

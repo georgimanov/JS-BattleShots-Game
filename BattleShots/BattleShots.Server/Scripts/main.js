@@ -64,19 +64,19 @@ function showArena(gameId) {
     $("<div />").load("Partials/arena-table-enemy.html", function (html) {
         $("main").append(html);
     });
+
     $("<div />").load("Partials/arena-table-user.html", function (html) {
         $("main").append(html);
     });
+
     debugger;
-    data.battle.random(gameId).then(function () {
-        data.battle.state(id).then(function (result) {
-            console.log(result);
-        }, function (error) {
-            showError(error);
-        });
+    data.battle.random(gameId).then(function (data) {
+        alert('success');
     }, function (error) {
+        alert('error');
+
+        debugger;
         showError(error);
-        alert(error);
     });
 }
 
