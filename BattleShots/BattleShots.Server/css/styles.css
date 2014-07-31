@@ -112,16 +112,6 @@ aside hr {
     border: 0;
     padding:  3px 10px;
 }
-main {
-    float: left;
-    width: 80%;
-    background-color: rgba(165,190,57,0.7);
-    margin: 10px 0;
-}
-#left-side {
-    display: inline-block;
-    width: 40%;
-}
 #opponent-board {
     width: 390px;
 }
@@ -158,12 +148,7 @@ main {
 #score-board div:nth-child(2) span {
     color: #40b549;
 }
-#right-side{
-    display: inline-block;
-    width: 59%;
-}
 #main-board {
-    margin: 10px auto;
     width: 490px;
 }
 #main-board .grid-box {
@@ -434,4 +419,19 @@ main {
 }
 .draggable.ui-draggable-dragging {
     background: red;
+}
+
+.float-left{
+    float:left;
+}
+#arena{
+    max-resolution: 5px;
+    padding: 10px;
+    margin: 10px;
+    background-color: rgba(165,190,57,0.7);
+    border-radius: 3px;
+    border: 1px solid rgba(185, 206, 114,0.7);
+}
+.clear{
+    clear: both;
 }

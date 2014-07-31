@@ -1,5 +1,5 @@
-//var baseUrl = "http://localhost:32033/api/";
-var baseUrl = "http://battleshots-1.apphb.com/api/";
+var baseUrl = "http://localhost:32033/api/";
+//var baseUrl = "http://battleshots-1.apphb.com/api/";
 var gameAcces = false;
 var selectBar = false;
 var userName = localStorage.getItem('userName');
@@ -62,16 +62,16 @@ function showArena(gameId) {
     $('.basic-element').hide();
     $('#arena').fadeIn(animationSpeed);
     $("<div />").load("Partials/arena-table-user.html", function (html) {
-        $("main").append(html);
+        $("#my-table").append(html);
     });
     $("<div />").load("Partials/arena-table-enemy.html", function (html) {
-        $("main").append(html);
+        $("#enemy-table").append(html);
     });
 
     data.battle.random(gameId).then(function (result) {
         data.battle.state(gameId).then(function (result2) {
             var id = result2.Id;
-            DrawArena('mine',result2,"MyBoard");
+            DrawArena('main',result2,"MyBoard");
             DrawArena('opp',result2,"OpponentBoard");
         }, function (err) {
             showError(err);
@@ -256,6 +256,7 @@ function DrawArena(idPattern,obj,param ){
 //         myBoardArr[i][j] = result2.MyBoard[i * 10 + j];
             var MyBoardChar = (obj[param][i * 10 + j]).toString();
             var myBoardId = idPattern+"-"+(i+1)+"-"+ (j+1);
+            alert(myBoardId);
             switch(MyBoardChar){
 
                 case "0" : break;
