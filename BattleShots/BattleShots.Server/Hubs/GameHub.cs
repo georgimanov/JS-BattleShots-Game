@@ -38,11 +38,11 @@ namespace BattleShots.Server.Hubs
             var game = context.Games.FirstOrDefault(g => g.Id == gameId);
             if (firstPlayerPlaced)
             {
-                Clients.Client(game.SecondPlayerConnId).requestBoards();
+                Clients.Client(game.SecondPlayerConnId).requestBoards(gameId);
             }
             else
             {
-                Clients.Client(game.FirstPlayerConnId).requestBoards();
+                Clients.Client(game.FirstPlayerConnId).requestBoards(gameId);
             }
         }
     }
