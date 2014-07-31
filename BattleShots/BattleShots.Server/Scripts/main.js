@@ -4,7 +4,7 @@ var result2 = {
     OpponentBoardBoard: "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
 };
 
-function DrowArena(idPattern,obj,param ){
+function DrawArena(idPattern,obj,param ){
 
 //var myBoardArr = [];
     for (var i = 0 ;i < 10; i++) {
@@ -13,6 +13,7 @@ function DrowArena(idPattern,obj,param ){
 //         myBoardArr[i][j] = result2.MyBoard[i * 10 + j];
             var MyBoardChar = (obj[param][i * 10 + j]).toString();
             var myBoardId = idPattern+"-"+(i+1)+"-"+ (j+1);
+            alert('bai min4o');
             switch(MyBoardChar){
                 case "0" : break;
                 case "~" : $('#'+myBoardId).addClass('hit-water');
