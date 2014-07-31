@@ -70,9 +70,24 @@ function showArena(gameId) {
 
     data.battle.random(gameId).then(function (result) {
         data.battle.state(gameId).then(function (result2) {
-            console.log("result2");
-            debugger;
-            console.log(result2);
+            var id = result2.Id;
+            var myBoardArr = [];
+            for (var i = 0; i < 10; i++) {
+                myBoardArr[i] = [];
+                for (var j = 0; j < 10; j++) {
+                    myBoardArr[i][j] = result2.MyBoard[i * 10 + j];
+                }
+            }
+
+            var opponentBoardArr = [];
+            for (var i = 0; i < 10; i++) {
+                opponentBoardArr[i] = [];
+                for (var j = 0; j < 10; j++) {
+                    opponentBoardArr[i][j] = result2.OpponentBoardBoard[i * 10 + j];
+                }
+            }
+
+
         }, function (err) {
             showError(err);
         });
