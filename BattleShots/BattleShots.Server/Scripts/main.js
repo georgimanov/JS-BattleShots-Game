@@ -1,53 +1,3 @@
-function DrawArena(idPattern,obj,param ){
-
-//var myBoardArr = [];
-    for (var i = 0 ;i < 10; i++) {
-//    myBoardArr[i] = [];
-        for (var j = 0; j < 10; j++) {
-//         myBoardArr[i][j] = result2.MyBoard[i * 10 + j];
-            var MyBoardChar = (obj[param][i * 10 + j]).toString();
-            var myBoardId = idPattern+"-"+(i+1)+"-"+ (j+1);
-            alert('bai min4o');
-            switch(MyBoardChar){
-                case "0" : break;
-                case "~" : $('#'+myBoardId).addClass('hit-water');
-                    break;
-                case "*" : $('#'+myBoardId).addClass('hit-ship');
-                    break;
-                case "A" : $('#'+myBoardId).addClass('aircraft-carrier');
-                    break;
-                case "B" : $('#'+myBoardId).addClass('battleship');
-                    break;
-                case "S" : $('#'+myBoardId).addClass('submarine');
-                    break;
-                case "D" : $('#'+myBoardId).addClass('destroyer');
-                    break;
-                case "P" : $('#'+myBoardId).addClass('patrol-boat');
-                    break;
-                case "a" : $('#'+myBoardId).addClass('aircraft-carrier-demage');
-                    break;
-                case "b" : $('#'+myBoardId).addClass('battleship-demage');
-                    break;
-                case "c" : $('#'+myBoardId).addClass('submarine-demage');
-                    break;
-                case "d" : $('#'+myBoardId).addClass('destroyer-demage');
-                    break;
-                case "e" : $('#'+myBoardId).addClass('patrol-boat-demage');
-                    break;
-            }
-        }
-    }
-}
-
-var opponentBoardArr = [];
-for (var i = 0; i < 10; i++) {
-    opponentBoardArr[i] = [];
-    for (var j = 0; j < 10; j++) {
-        opponentBoardArr[i][j] = result2.OpponentBoardBoard[i * 10 + j];
-    }
-}
-
-
 // var baseUrl = "http://localhost:32033/api/";
 var baseUrl = "http://battleshots-1.apphb.com/api/";
 var gameAcces = false;
@@ -296,4 +246,44 @@ function logOut() {
         }, function (error) {
             showError(error);
         });
+}
+function DrawArena(idPattern,obj,param ){
+
+//var myBoardArr = [];
+    for (var i = 0 ;i < 10; i++) {
+//    myBoardArr[i] = [];
+        for (var j = 0; j < 10; j++) {
+//         myBoardArr[i][j] = result2.MyBoard[i * 10 + j];
+            var MyBoardChar = (obj[param][i * 10 + j]).toString();
+            var myBoardId = idPattern+"-"+(i+1)+"-"+ (j+1);
+            alert('bai min4o');
+            switch(MyBoardChar){
+                case "0" : break;
+                case "~" : $('#'+myBoardId).addClass('hit-water');
+                    break;
+                case "*" : $('#'+myBoardId).addClass('hit-ship');
+                    break;
+                case "A" : $('#'+myBoardId).addClass('aircraft-carrier');
+                    break;
+                case "B" : $('#'+myBoardId).addClass('battleship');
+                    break;
+                case "S" : $('#'+myBoardId).addClass('submarine');
+                    break;
+                case "D" : $('#'+myBoardId).addClass('destroyer');
+                    break;
+                case "P" : $('#'+myBoardId).addClass('patrol-boat');
+                    break;
+                case "a" : $('#'+myBoardId).addClass('aircraft-carrier-demage');
+                    break;
+                case "b" : $('#'+myBoardId).addClass('battleship-demage');
+                    break;
+                case "c" : $('#'+myBoardId).addClass('submarine-demage');
+                    break;
+                case "d" : $('#'+myBoardId).addClass('destroyer-demage');
+                    break;
+                case "e" : $('#'+myBoardId).addClass('patrol-boat-demage');
+                    break;
+            }
+        }
+    }
 }
