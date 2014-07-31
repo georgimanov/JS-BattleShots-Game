@@ -21,7 +21,7 @@ window.dataRepositories = (function () {
                 password: SHA1(password)
             };
             var headers = {
-                "X-SessionKey": sessionKeyDb
+                "X-SessionKey": localStorage.getItem("sessionKey")
             };
 
             return httpRequester.postJson(this.url + "new/", game, headers);
@@ -34,9 +34,9 @@ window.dataRepositories = (function () {
                 game.password = SHA1(password);
             }
             var headers = {
-                "X-SessionKey": sessionKeyDb
+                "X-SessionKey": localStorage.getItem("sessionKey")
             };
-
+            debugger;
             return httpRequester.postJson(this.url + "join/" + id, game, headers);
         },
 

@@ -104,6 +104,7 @@ function showBars() {
 
             if (tablePass == confirmPass) {
                 var pass = SHA1(tablePass);
+                debugger;
                 data.games.newGame(tableName, tablePass)
                 .then(function (data) {
                     $("#table-name").val("");
