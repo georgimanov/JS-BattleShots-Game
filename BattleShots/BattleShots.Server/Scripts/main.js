@@ -256,6 +256,7 @@ function DrawArena(idPattern,obj,param ){
 //         myBoardArr[i][j] = result2.MyBoard[i * 10 + j];
             var MyBoardChar = (obj[param][i * 10 + j]).toString();
             var myBoardId = idPattern+"-"+(i+1)+"-"+ (j+1);
+            alert($('#'+myBoardId));
             switch(MyBoardChar){
 
                 case "0" : break;
