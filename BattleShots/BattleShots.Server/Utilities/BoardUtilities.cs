@@ -10,6 +10,8 @@ namespace BattleShots.Server.Utilities
 {
     public static class BoardUtilities
     {
+        private static Random random = new Random();
+
         private const int BoardSize = 10;
 
         public static char[,] GenerateVisibleBoard(char[,] attackedBoard)
@@ -106,7 +108,7 @@ namespace BattleShots.Server.Utilities
             return deserializedBoard;
         }
 
-        private static int GetLength(string unitModelType)
+        internal static int GetLength(string unitModelType)
         {
             switch (unitModelType)
             {
@@ -204,6 +206,62 @@ namespace BattleShots.Server.Utilities
             }
         }
 
+        private static bool EnsureRandomUnitIsInField(UnitBindingModel unitModel, int length)
+        {
+            if (unitModel.Row < 1 || unitModel.Col < 1)
+            {
+                return false;
+            }
+
+            if (unitModel.Rotation != Ship.HorizontalRotation && unitModel.Rotation != Ship.VerticalRotation)
+            {
+                return false;
+            }
+
+            if (unitModel.Rotation == Ship.HorizontalRotation &&
+                unitModel.Col + length - 1 > BoardSize)
+            {
+                return false;
+            }
+            else if (unitModel.Rotation == Ship.VerticalRotation &&
+                unitModel.Row + length - 1 > BoardSize)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private static bool EnsureRandomUnitDoesNotOverlap(UnitBindingModel unitModel, char[,] board, int length)
+        {
+            if (unitModel.Rotation == Ship.HorizontalRotation)
+            {
+                for (int i = unitModel.Col - 1; i < unitModel.Col - 1 + length; i++)
+                {
+                    if (board[unitModel.Row - 1, i] != Cell.Empty)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+            else if (unitModel.Rotation == Ship.VerticalRotation)
+            {
+                for (int i = unitModel.Row - 1; i < unitModel.Row - 1 + length; i++)
+                {
+                    if (board[i, unitModel.Col - 1] != Cell.Empty)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            throw new InvalidOperationException("Invalid rotation");
+        }
+
         public static void ValidateAttack(AttackingModel model)
         {
             if (model.Row < 1 || model.Row > BoardSize)
@@ -255,6 +313,34 @@ namespace BattleShots.Server.Utilities
             }
 
             return cell;
+        }
+
+        internal static Tuple<char[,], List<UnitBindingModel>> GenerateRandomBoard()
+        {
+            char[,] board = BoardUtilities.GenerateEmptyBoard();
+            var units = new[] { Ship.AircraftCarrier, Ship.Battleship, Ship.Destroyer, Ship.Submarine, Ship.PatrolBoat };
+            var generatedUnits = new List<UnitBindingModel>(units.Length);
+            var rotations = new[] { Ship.HorizontalRotation, Ship.VerticalRotation };
+            for (int i = 0; i < units.Length; i++)
+            {
+                int randomRow = random.Next(1, 11);
+                int randomCol = random.Next(1, 11);
+                string randomRotation = rotations[random.Next(0, 2)];
+                var model = new UnitBindingModel() { Row = randomRow, Col = randomCol, Rotation = randomRotation, UnitType = units[i] };
+                while (!EnsureRandomUnitIsInField(model, GetLength(model.UnitType)) ||
+                    !EnsureRandomUnitDoesNotOverlap(model, board, GetLength(model.UnitType)))
+                {
+                    randomRow = random.Next(1, 11);
+                    randomCol = random.Next(1, 11);
+                    randomRotation = rotations[random.Next(0, 2)];
+                    model = new UnitBindingModel() { Row = randomRow, Col = randomCol, Rotation = randomRotation, UnitType = units[i] };
+                }
+
+                generatedUnits.Add(model);
+                board = PlaceUnit(board, model);
+            }
+
+            return new Tuple<char[,], List<UnitBindingModel>>(board, generatedUnits);
         }
     }
 }

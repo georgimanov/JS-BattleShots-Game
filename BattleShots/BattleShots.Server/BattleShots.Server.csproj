@@ -191,9 +191,12 @@
     <Content Include="img\battleship.png" />
     <Content Include="img\destroyer-demage.png" />
     <Content Include="img\destroyer.png" />
+    <Content Include="img\fav.ico" />
     <Content Include="img\logo.png" />
     <Content Include="img\patrol-boat-demage.png" />
     <Content Include="img\patrol-boat.png" />
+    <Content Include="img\ship-hit.png" />
+    <Content Include="img\ship-missed.png" />
     <Content Include="img\submarine-demage.png" />
     <Content Include="img\submarine.png" />
     <Content Include="index.html" />

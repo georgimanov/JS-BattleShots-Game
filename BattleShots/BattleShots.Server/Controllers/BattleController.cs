@@ -21,6 +21,8 @@ namespace BattleShots.Server.Controllers
         private const string PartialState = "partial";
         private const string DestroyedState = "destroyed";
 
+        private Random random = new Random();
+
         // POST api/battle/place/5
         [HttpPost]
         public IHttpActionResult Place(int id, [FromBody]FiguresPlacingModel placingModel)
@@ -326,6 +328,85 @@ namespace BattleShots.Server.Controllers
                 context.SaveChanges();
 
                 return GetGameModel(game, playerNumber);
+            });
+
+            return response;
+        }
+
+        // POST api/battle/random/5
+        [HttpPost]
+        public IHttpActionResult Random(int id)
+        {
+            var response = this.PerformOperationWithNoContent(() =>
+            {
+                var context = new ApplicationDbContext();
+                using (context)
+                {
+                    var game = context.Games.FirstOrDefault(g => g.Id == id);
+                    var stateGameReady = context.GameStates.First(s => s.State == GameReadyState);
+                    var stateOpen = context.GameStates.First(s => s.State == OpenState);
+                    var stateInProgress = context.GameStates.First(s => s.State == InProgressState);
+                    if (game == null)
+                    {
+                        throw new ServerErrorException("The game does not exist.", ErrorType.InvalidGame);
+                    }
+                    if (game.State != stateGameReady && game.State != stateOpen && game.State != stateInProgress)
+                    {
+                        throw new ServerErrorException("The game is not ready to start.", ErrorType.InvalidGame);
+                    }
+
+                    int playerNumber = 0;
+
+                    var first = BoardUtilities.GenerateRandomBoard();
+                    var second = BoardUtilities.GenerateRandomBoard();
+                    game.FirstPlayerBoard = BoardUtilities.SerializeBoard(first.Item1);
+                    var fullState = context.UnitStates.FirstOrDefault(s => s.State == "full");
+                    foreach (var unit in first.Item2)
+                    {
+                        var type = context.UnitTypes.FirstOrDefault(s => s.Type == unit.UnitType);
+                        var rotation = context.Rotations.FirstOrDefault(r => r.Type == unit.Rotation);
+                        var unitToAdd = new Unit()
+                        {
+                            User = game.FirstPlayer,
+                            Type = type,
+                            State = fullState,
+                            Row = unit.Row,
+                            Col = unit.Col,
+                            Rotation = rotation,
+                            RemainingCells = BoardUtilities.GetLength(unit.UnitType),
+                            Game = game
+                        };
+
+                        game.FirstPlayerUnits.Add(unitToAdd);
+                    }
+
+                    game.SecondPlayerBoard = BoardUtilities.SerializeBoard(second.Item1);
+                    foreach (var unit in second.Item2)
+                    {
+                        var type = context.UnitTypes.FirstOrDefault(s => s.Type == unit.UnitType);
+                        var rotation = context.Rotations.FirstOrDefault(r => r.Type == unit.Rotation);
+                        var unitToAdd = new Unit()
+                        {
+                            User = game.SecondPlayer,
+                            Type = type,
+                            State = fullState,
+                            Row = unit.Row,
+                            Col = unit.Col,
+                            Rotation = rotation,
+                            RemainingCells = BoardUtilities.GetLength(unit.UnitType),
+                            Game = game
+                        };
+
+                        game.SecondPlayerUnits.Add(unitToAdd);
+                    }
+
+                    game.FirstPlayerVisibleBoard = BoardUtilities.SerializeBoard(BoardUtilities.GenerateVisibleBoard(first.Item1));
+                    game.SecondPlayerVisibleBoard = BoardUtilities.SerializeBoard(BoardUtilities.GenerateVisibleBoard(second.Item1));
+                    game.State = context.GameStates.FirstOrDefault(s => s.State == InProgressState);
+                    context.SaveChanges();
+
+                    return "";
+                }
             });
 
             return response;
