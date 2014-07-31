@@ -75,6 +75,7 @@ window.dataRepositories = (function () {
         },
 
         random: function (id) {
+            debugger;
             return httpRequester.postJson(this.url + "random/" + id, {}, {});
         },
 

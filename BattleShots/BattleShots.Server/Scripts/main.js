@@ -68,16 +68,8 @@ function showArena(gameId) {
         $("main").append(html);
     });
 
-    data.battle.random(gameId).then(function (data) {
-        debugger;
-        data.battle.state(gameId)
-         .then(function (data) {
-             debugger;
-             console.log(data);
-             alert('success');
-         }, function (error) {
-             showError(error);
-         });
+    data.battle.random(gameId).then(function (result) {
+        console.log(result);
     }, function (error) {
         showError(error);
     });
@@ -96,7 +88,7 @@ function showBars() {
         var id = e.target.id;
         var pass = $(e.target).parent().parent().find("input").val();
         data.games.join(id, pass)
-        .then(function (data) {
+        .then(function (res) {
             selectBar = true;
             $.connection.hub.start()
             .done(function () {
@@ -147,7 +139,6 @@ function showBars() {
 
             if (tablePass == confirmPass) {
                 var pass = SHA1(tablePass);
-                debugger;
                 data.games.newGame(tableName, tablePass)
                 .then(function (data) {
                     $("#table-name").val("");
