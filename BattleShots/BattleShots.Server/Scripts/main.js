@@ -68,15 +68,16 @@ function showArena(gameId) {
         $("main").append(html);
     });
 
-    debugger;
     data.battle.random(gameId).then(function (data) {
+        debugger;
         data.battle.state(gameId)
-        .then(function (data) {
-            console.log(data);
-            alert('success');
-        }, function (error) {
-            showError(error);
-        });
+         .then(function (data) {
+             debugger;
+             console.log(data);
+             alert('success');
+         }, function (error) {
+             showError(error);
+         });
     }, function (error) {
         showError(error);
     });

@@ -67,6 +67,7 @@ window.dataRepositories = (function () {
         },
 
         state: function (id) {
+            debugger;
             var headers = {
                 "X-SessionKey": localStorage.getItem("sessionKey")
             };

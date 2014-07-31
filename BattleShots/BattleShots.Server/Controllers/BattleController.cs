@@ -175,7 +175,10 @@ namespace BattleShots.Server.Controllers
                         throw new ServerErrorException("The game does not exist.", ErrorType.InvalidGame);
                     }
 
-                    if (game.State != stateGameReady && game.State != stateBattleStarted)
+                    if (string.IsNullOrEmpty(game.FirstPlayerBoard) ||
+                        string.IsNullOrEmpty(game.FirstPlayerVisibleBoard) ||
+                        string.IsNullOrEmpty(game.SecondPlayerBoard) ||
+                        string.IsNullOrEmpty(game.SecondPlayerVisibleBoard))
                     {
                         throw new ServerErrorException("The game is not currently in progress.", ErrorType.InvalidGame);
                     }
