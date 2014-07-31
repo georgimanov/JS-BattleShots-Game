@@ -69,8 +69,13 @@ function showArena(gameId) {
     });
 
     data.battle.random(gameId).then(function (result) {
-        console.log("result (random): "+result);
-        debugger;
+        data.battle.state(gameId).then(function (result2) {
+            console.log("result2");
+            debugger;
+            console.log(result2);
+        }, function (err) {
+            showError(err);
+        });
     }, function (error) {
         showError(error);
     });

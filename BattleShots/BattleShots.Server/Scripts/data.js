@@ -71,7 +71,7 @@ window.dataRepositories = (function () {
             var headers = {
                 "X-SessionKey": localStorage.getItem("sessionKey")
             };
-            return httpRequester.getJson(this.url + "state/" + id, {}, headers);
+            return httpRequester.getJson(this.url +"state/" + id, headers);
         },
 
         random: function (id) {

@@ -175,11 +175,6 @@ namespace BattleShots.Server.Controllers
                         throw new ServerErrorException("The game does not exist.", ErrorType.InvalidGame);
                     }
 
-                    if (game.State != stateGameReady && game.State != stateBattleStarted)
-                    {
-                        throw new ServerErrorException("The game is not currently in progress.", ErrorType.InvalidGame);
-                    }
-
                     int playerNumber = 0;
                     if (game.FirstPlayer != user)
                     {
