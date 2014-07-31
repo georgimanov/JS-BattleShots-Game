@@ -159,41 +159,38 @@ namespace BattleShots.Server.Controllers
                 string sessionKey = GetSessionKey();
 
                 var context = new ApplicationDbContext();
-                using (context)
+                var user = context.Users.FirstOrDefault(u => u.SessionKey == sessionKey);
+                if (user == null)
                 {
-                    var user = context.Users.FirstOrDefault(u => u.SessionKey == sessionKey);
-                    if (user == null)
-                    {
-                        throw new ServerErrorException("The user does not exist.", ErrorType.InvalidUser);
-                    }
+                    throw new ServerErrorException("The user does not exist.", ErrorType.InvalidUser);
+                }
 
-                    var game = context.Games.FirstOrDefault(g => g.Id == id);
-                    var stateGameReady = context.GameStates.First(s => s.State == GameReadyState);
-                    var stateBattleStarted = context.GameStates.First(s => s.State == BattleStartedState);
-                    if (game == null)
-                    {
-                        throw new ServerErrorException("The game does not exist.", ErrorType.InvalidGame);
-                    }
+                var game = context.Games.FirstOrDefault(g => g.Id == id);
+                var stateGameReady = context.GameStates.First(s => s.State == GameReadyState);
+                var stateBattleStarted = context.GameStates.First(s => s.State == BattleStartedState);
+                if (game == null)
+                {
+                    throw new ServerErrorException("The game does not exist.", ErrorType.InvalidGame);
+                }
 
-                    int playerNumber = 0;
-                    if (game.FirstPlayer != user)
+                int playerNumber = 0;
+                if (game.FirstPlayer != user)
+                {
+                    if (game.SecondPlayer != user)
                     {
-                        if (game.SecondPlayer != user)
-                        {
-                            throw new ServerErrorException("You cannot play in this game.", ErrorType.InvalidGame);
-                        }
-                        else
-                        {
-                            playerNumber = 2;
-                        }
+                        throw new ServerErrorException("You cannot play in this game.", ErrorType.InvalidGame);
                     }
                     else
                     {
-                        playerNumber = 1;
+                        playerNumber = 2;
                     }
-
-                    return GetGameModel(game, playerNumber);
                 }
+                else
+                {
+                    playerNumber = 1;
+                }
+
+                return GetGameModel(game, playerNumber);
             });
 
             return response;
@@ -482,8 +479,8 @@ namespace BattleShots.Server.Controllers
             {
                 Id = g.Id,
                 Title = g.Title,
-                FirstPlayer = g.FirstPlayer.Username,
-                SecondPlayer = g.SecondPlayer.Username,
+                FirstPlayer = g.FirstPlayer != null ? g.FirstPlayer.Username : "",
+                SecondPlayer = g.SecondPlayer != null ? g.SecondPlayer.Username : "",
                 State = g.State.State,
                 MyBoard = ((playerNumber == 1) ? g.FirstPlayerBoard : g.SecondPlayerBoard),
                 OpponentBoard = ((playerNumber == 1) ? g.SecondPlayerVisibleBoard : g.FirstPlayerVisibleBoard),
