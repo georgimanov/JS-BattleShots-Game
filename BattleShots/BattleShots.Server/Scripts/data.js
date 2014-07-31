@@ -7,6 +7,7 @@ window.dataRepositories = (function () {
         init: function (baseUrl) {
             this.baseUrl = baseUrl;
             this.games = new GamesRepository(baseUrl + "games/");
+            this.battle = new BattleRepository(baseUrl + "battle/");
         }
     });
 
@@ -42,6 +43,46 @@ window.dataRepositories = (function () {
 
         open: function () {
             return httpRequester.getJson(this.url + "open/", {});
+        }
+    });
+
+    var BattleRepository = Class.create({
+        init: function (url) {
+            this.url = url;
+        },
+
+        place: function (id, password, ships) {
+            var game = {
+                ships: ships
+            };
+
+            if (password) {
+                game.password = password;
+            }
+
+            var headers = {
+                "X-SessionKey": localStorage.getItem("sessionKey")
+            };
+
+            return httpRequester.postJson(this.url + "place/" + id, game, headers);
+        },
+
+        state: function (id) {
+            var headers = {
+                "X-SessionKey": localStorage.getItem("sessionKey")
+            };
+            return httpRequester.getJson(this.url + "state/" + id, {}, headers);
+        },
+
+        attack: function (id, row, col) {
+            var game = {
+                row: row,
+                col: col
+            };
+            var headers = {
+                "X-SessionKey": localStorage.getItem("sessionKey")
+            };
+            return httpRequester.postJson(this.url + "attack/" + id, game, headers);
         }
     });
 

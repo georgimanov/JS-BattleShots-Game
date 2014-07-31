@@ -113,6 +113,7 @@ function showBars() {
                     $.connection.hub.start()
                     .done(function () {
                         game.server.storeConnectionId(true, data.Id);
+                        showArena(data.Id);
                     });
                 }, function (err) {
                     showError(err);
