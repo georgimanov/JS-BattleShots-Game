@@ -101,7 +101,7 @@ function showBars() {
                 game.server.informPlayer(id, false);
             });
             selectBar = true;
-            checkGameAcces(id);
+            showArena(id);
         },
         function (err) {
             showError(err);
@@ -213,7 +213,6 @@ function checkLogin() {
             localStorage.setItem('sessionKey', dataSessionKey);
 
             checkGameAcces();
-
         }, function (error) {
             console.log(error);
             showError(error);
