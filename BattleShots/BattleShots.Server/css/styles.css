@@ -11,6 +11,8 @@ header {
     padding: 10px;
     display: flex;
     justify-content: space-between;
+    border-radius: 5px;
+    border: 2px solid rgba(185, 206, 114,1);
 }
 h1, h2, h3 {
     font-weight: bold;
@@ -29,6 +31,8 @@ h1, h2, h3 {
     display: flex;
     justify-content: flex-end;
     display: none;
+    border-radius: 5px;
+    border: 2px solid rgba(185, 206, 114,1);
 }
 #user-box span {
     padding: 10px 0 10px 20px;
@@ -262,9 +266,9 @@ main {
     float: right;
     display: table;
     width: 30%;
-    border-radius: 5px;
     background-color: rgba(185, 206, 114,0.7);
     margin: 10px;
+    border-radius: 5px;
     border: 2px solid rgba(185, 206, 114,1);
     padding-top: 30px;
 }
