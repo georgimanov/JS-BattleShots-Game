@@ -140,7 +140,9 @@ main {
     text-align: center;
     font-size: 16px;
     display: inline-block;
+    display: none;
 }
+
 #score-board > h2{
     margin: 5px auto;
 }
