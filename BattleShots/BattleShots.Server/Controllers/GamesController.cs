@@ -79,6 +79,7 @@ namespace BattleShots.Server.Controllers
 
                     var game = context.Games.FirstOrDefault(g => g.Id == id);
                     var stateOpen = context.GameStates.First(s => s.State == OpenState);
+                    var stateInProgress = context.GameStates.First(s => s.State == InProgressState);
                     if (game == null)
                     {
                         throw new ServerErrorException("The game does not exist.", ErrorType.InvalidGame);
@@ -89,7 +90,7 @@ namespace BattleShots.Server.Controllers
                         throw new ServerErrorException("The entered password for this game is wrong.", ErrorType.InvalidPassword);
                     }
 
-                    if (game.State != stateOpen)
+                    if (game.State != stateOpen && game.State != InProgressState)
                     {
                         throw new ServerErrorException("The game is not open.", ErrorType.InvalidGame);
                     }
