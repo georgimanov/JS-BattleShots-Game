@@ -41,8 +41,8 @@ function showArena(gameId) {
 }
 
 var game = $.connection.gameHub;
-game.client.storeConnectionId = function () {
-    console.log(arguments);
+game.client.requestBoards = function (gameId) {
+    alert("Request boards called! Game ID: "+ gameId);
 };
 
 function showBars() {
@@ -59,6 +59,7 @@ function showBars() {
             .done(function () {
                 debugger;
                 game.server.storeConnectionId(false, id);
+                game.server.informPlayer(id, false);
             });
             showArena(id);
         },

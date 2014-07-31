@@ -32,7 +32,7 @@ namespace BattleShots.Server.Hubs
             context.SaveChanges();
         }
 
-        public void InformPlayerPlacedFigures(int gameId, bool firstPlayerPlaced)
+        public void InformPlayer(int gameId, bool firstPlayerPlaced)
         {
             var context = new ApplicationDbContext();
             var game = context.Games.FirstOrDefault(g => g.Id == gameId);
