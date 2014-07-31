@@ -27,11 +27,12 @@ window.dataRepositories = (function () {
             return httpRequester.postJson(this.url + "new/", game, headers);
         },
 
-        join: function (id, title, password) {
-            var game = {
-                title: title,
-                password: SHA1(password)
-            };
+        join: function (id, password) {
+            debugger;
+            var game = {};
+            if (password) {
+                game.password = SHA1(password);
+            }
             var headers = {
                 "X-SessionKey": sessionKeyDb
             };

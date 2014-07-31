@@ -39,13 +39,23 @@ function showArena() {
     $('.basic-element').hide();
     $('#arena').fadeIn(animationSpeed);
 }
+
 function showBars() {
     $('.basic-element').hide();
     $('#bars-box').show();
-    $("<div />").load("Partials/lobby-tables.html", function (html) {
-        $(".table-cell").click(".btn", function (e) {
-            console.log(e);
+    $('#bars-box').on("click", ".table-cell .btn", function (e) {
+        var id = e.target.id;
+        var pass = $(e.target).parent().parent().find("input").val();
+        console.log(pass);
+        data.games.join(id, pass)
+        .then(function (data) {
+            console.log(data);
+        },
+        function (err) {
+            showError(error);
         });
+    });
+    $("<div />").load("Partials/lobby-tables.html", function (html) {
         data.games.open()
             .then(function (data) {
                 $(data).each(function (el) {
@@ -68,6 +78,7 @@ function showBars() {
             });
         }, 5000);
     });
+
     $("#create-table-form").load("Partials/create-table-form.html", function () {
         $("#create-table-form").on("click", "#create-table-btn", function (e) {
             var tableName = $("#table-name").val();
