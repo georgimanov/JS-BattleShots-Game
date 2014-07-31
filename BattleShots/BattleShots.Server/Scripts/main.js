@@ -69,7 +69,8 @@ function showArena(gameId) {
     });
 
     data.battle.random(gameId).then(function (result) {
-        console.log(result);
+        console.log("result (random): "+result);
+        debugger;
     }, function (error) {
         showError(error);
     });
@@ -104,9 +105,9 @@ function showBars() {
     });
     $("<div />").load("Partials/lobby-tables.html", function (html) {
         data.games.open()
-            .then(function (data) {
-                $(data).each(function (el) {
-                    var result = parseTemplate(html, { title: data[el].Title, i: data[el].Id, pwd: "" });
+            .then(function (ress) {
+                $(ress).each(function (el) {
+                    var result = parseTemplate(html, { title: ress[el].Title, i: ress[el].Id, pwd: "" });
                     $("#bars-box").append(result);
                 });
             }, function (error) {
@@ -114,15 +115,15 @@ function showBars() {
             });
         setInterval(function () {
             data.games.open()
-            .then(function (data) {
+            .then(function (res) {
                 var values = [];
                 $("#bars-box input").each(function () {
                     values.push($(arguments[1]).val());
                 });
 
                 $("#bars-box").html("");
-                $(data).each(function (el) {
-                    var result = parseTemplate(html, { title: data[el].Title, i: data[el].Id, pwd: values[el] });
+                $(res).each(function (el) {
+                    var result = parseTemplate(html, { title: res[el].Title, i: res[el].Id, pwd: values[el] });
                     $("#bars-box").append(result);
                 });
             }, function (error) {
@@ -140,15 +141,15 @@ function showBars() {
             if (tablePass == confirmPass) {
                 var pass = SHA1(tablePass);
                 data.games.newGame(tableName, tablePass)
-                .then(function (data) {
+                .then(function (r) {
                     $("#table-name").val("");
                     $("#table-pass").val("");
                     $("#confirm-pass").val("");
                     $.connection.hub.start()
                     .done(function () {
-                        game.server.storeConnectionId(true, data.Id);
+                        game.server.storeConnectionId(true, r.Id);
                         selectBar = true;
-                        checkGameAcces(data.Id);
+                        checkGameAcces(r.Id);
                     });
                 }, function (err) {
                     showError(err);
@@ -168,14 +169,14 @@ function registerUser() {
     if (userPass === userPass2) {
         var pass = SHA1(userPass);
 
-        var data = {
+        var userData = {
             "username": loginName,
             "password": pass
         };
-        httpRequester.postJson(baseUrl + 'account/register', data, {})
-            .then(function (data) {
-                var DataUserName = data['Username'];
-                var dataSessionKey = data['SessionKey'];
+        httpRequester.postJson(baseUrl + 'account/register', userData, {})
+            .then(function (userData) {
+                var DataUserName = userData['Username'];
+                var dataSessionKey = userData['SessionKey'];
                 localStorage.setItem('userName', DataUserName);
                 localStorage.setItem('sessionKey', dataSessionKey);
 
