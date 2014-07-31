@@ -1,9 +1,3 @@
-
-var result2 = {
-    MyBoard: "00bBBB00000000000000000P000000000P00000000000000000000AAAAA000000000000000000DDD0000000000000000SSS0",
-    OpponentBoardBoard: "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
-};
-
 function DrawArena(idPattern,obj,param ){
 
 //var myBoardArr = [];
@@ -127,8 +121,8 @@ function showArena(gameId) {
     data.battle.random(gameId).then(function (result) {
         data.battle.state(gameId).then(function (result2) {
             var id = result2.Id;
-            DrowArena('mine-',result2,"MyBoard");
-            DrowArena('opp-',result2,"OpponentBoard");
+            DrawArena('mine-',result2,"MyBoard");
+            DrawArena('opp-',result2,"OpponentBoard");
         }, function (err) {
             showError(err);
         });
