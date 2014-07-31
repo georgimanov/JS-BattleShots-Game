@@ -67,10 +67,10 @@ function showArena(gameId) {
     $("<div />").load("Partials/arena-table-user.html", function (html) {
         $("main").append(html);
     });
-
+    debugger;
     data.battle.random(gameId).then(function () {
-        data.battle.state(id).then(function (data) {
-            alert(data);
+        data.battle.state(id).then(function (result) {
+            console.log(result);
         }, function (error) {
             showError(error);
         });
@@ -154,7 +154,7 @@ function showBars() {
                     .done(function () {
                         game.server.storeConnectionId(true, data.Id);
                         selectBar = true;
-                        checkGameAcces();
+                        checkGameAcces(data.Id);
                     });
                 }, function (err) {
                     showError(err);

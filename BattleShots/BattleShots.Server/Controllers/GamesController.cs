@@ -83,12 +83,12 @@ namespace BattleShots.Server.Controllers
                     {
                         throw new ServerErrorException("The game does not exist.", ErrorType.InvalidGame);
                     }
-                    
+
                     if (!string.IsNullOrEmpty(game.Password) && game.Password != gameModel.Password)
                     {
                         throw new ServerErrorException("The entered password for this game is wrong.", ErrorType.InvalidPassword);
                     }
-                    
+
                     if (game.State != stateOpen)
                     {
                         throw new ServerErrorException("The game is not open.", ErrorType.InvalidGame);
@@ -120,25 +120,7 @@ namespace BattleShots.Server.Controllers
                 var context = new ApplicationDbContext();
 
                 return context.Games
-                    .Where(g => g.State.State == OpenState)
-                    .ToList()
-                    .Select(GameViewModel.FromGame);
-            });
-
-            return response;
-        }
-
-        // GET api/games/in-progress
-        [HttpGet]
-        [ActionName("in-progress")]
-        public IHttpActionResult InProgress()
-        {
-            var response = this.PerformOperation(() =>
-            {
-                var context = new ApplicationDbContext();
-
-                return context.Games
-                    .Where(g => g.State.State == InProgressState)
+                    .Where(g => g.State.State == OpenState || g.State.State == InProgressState)
                     .ToList()
                     .Select(GameViewModel.FromGame);
             });
