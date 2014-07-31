@@ -104,7 +104,7 @@ aside hr {
 #create-table input[type="text"], input[type="password"]{
     background-color: rgba(165,190,57,1);
     border: 1px solid #4d602b;
-    padding: 2px;
+    padding: 0px;
 }
 #create-table input[type="submit"]{
     color: #4d602b;
