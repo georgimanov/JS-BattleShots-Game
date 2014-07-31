@@ -332,7 +332,7 @@ main {
     background-color: rgba(239, 239, 143,0.8);
     outline: none;
     margin: 10px 20px;
-    color: #ffffff;
+    color: #000000;
 }
 
 
@@ -384,7 +384,7 @@ main {
     background-color: rgba(239, 239, 143,0.8);
     outline: none;
     margin: 10px 20px;
-    color: #ffffff;
+    color: #000;
 }
 
 
